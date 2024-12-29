@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fifth.cms.mapper.contract.ContractMapper">
+
+	<resultMap id="ContractMap" type="com.fifth.cms.model.contract.ContractVO">
+        <id property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="subject" column="subject"/>
+		<result property="message" column="message"/>
+		<result property="ip" column="ip"/>
+		<result property="signdate" column="signdate"/>
+    </resultMap>
+
+	<select id="selectContractList" resultMap="ContractMap">
+		SELECT * FROM FIFTH_CONTRACT
+		ORDER BY signdate DESC
+		limit #{startPoint}, #{limit};	
+	</select>
+
+	<select id="selectContractMaxCode" resultType="String">
+		SELECT 
+			(
+		    case
+				when (select MAX(code) from FIFTH_CONTRACT) is null then '0'
+		        else (select MAX(code) from FIFTH_CONTRACT)
+		    end
+		    ) as maxCode
+		FROM dual
+	</select>
+	
+	<select id="selectContractCount" resultType="Integer">
+		SELECT COUNT(*) FROM FIFTH_CONTRACT
+	</select>
+
+
+	<insert id="insertContract">
+		INSERT INTO FIFTH_CONTRACT (
+			code,
+			name,
+			subject, 
+			message, 
+			ip,
+			signdate
+		) VALUES (
+			#{ code }
+			,#{ name }
+			,#{ subject }
+			,#{ message }
+			,#{ ip }
+			,current_timestamp
+		)
+	</insert>
+
+</mapper>

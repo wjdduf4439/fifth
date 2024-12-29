@@ -1,0 +1,4 @@
+refresh token을 통한 access token 발급
+	interceptor에서 처리
+매 요청시 refresh token 검증
+	interceptor에서 처리

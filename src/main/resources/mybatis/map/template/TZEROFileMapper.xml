@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fifth.cms.mapper.template.TZERO.TZEROFileMapper">
+
+	<resultMap id="TemplateZeroFileVOMap" type="com.fifth.cms.model.template.TemplateZeroFileVO">
+		<id property="uid" column="uid"/>
+		<result property="code" column="code"/>
+		<result property="pid" column="pid"/>
+		<result property="fsign" column="fsign"/>
+		<result property="fpath" column="fpath"/>
+		<result property="savingFname" column="savingFname"/>
+		<result property="fname" column="fname"/>
+	</resultMap>
+
+	<select id="getFile" resultMap="TemplateZeroFileVOMap" parameterType="java.util.HashMap">
+		
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT	*, #{requesturl} as `requesturl`
+		FROM	${tableCode}_FILE
+		WHERE	uid = #{uid}
+	
+	</select>
+
+	<select id="getUploadedFileCount" resultType="int" parameterType="java.util.HashMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT COUNT(uid), #{requesturl} as `requesturl`
+		FROM ${tableCode}_FILE
+		WHERE pid = #{uid}		
+	</select>
+
+	
+	
+	<select id="selectFileRecordListMax" resultType="String" parameterType="java.util.HashMap">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		SELECT 
+			(
+		    case
+				when (select MAX(code) from ${tableCode}_FILE) is null then '0'
+		        else (select MAX(code) from ${tableCode}_FILE)
+		    end
+		    ) as maxCode
+		FROM dual
+	</select>
+	
+	<insert id="insertFileRecord">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		 	
+		INSERT INTO ${tableCode}_FILE(
+			code,
+			pid,
+			fsign,
+			fpath,
+			savingFname,
+			fname
+		) VALUES (
+			#{tableCode},
+			#{pid},
+			#{fsign},
+			#{fpath},
+			#{savingFname},
+			#{fname}
+		);
+    	<selectKey keyProperty="uid" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<delete id="deleteFileRecord">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		DELETE FROM ${tableCode}_FILE WHERE uid = #{uid};
+	</delete>
+
+</mapper>

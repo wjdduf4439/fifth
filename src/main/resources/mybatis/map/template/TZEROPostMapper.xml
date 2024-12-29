@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fifth.cms.mapper.template.TZERO.TZEROPostMapper">
+
+	<resultMap id="templateZeroListMap" type="com.fifth.cms.model.template.TemplateZeroVO">
+        <id property="uid" column="uid"/>
+		<result property="code" column="code"/>
+		<result property="codeHead" column="codeHead"/>
+		<result property="del_chk" column="del_chk"/>
+		<result property="notice_chk" column="notice_chk"/>
+		<result property="title" column="title"/>
+		<result property="writerNick" column="writerNick"/>	
+		<result property="viewNum" column="viewNum"/>
+		<result property="like" column="like"/>
+		<result property="dislike" column="dislike"/>
+		<result property="likeOptionPath" column="likeOptionPath"/>
+		<result property="frstRegistPnttm" column="frstRegistPnttm"/>
+		<result property="frstRegistNm" column="frstRegistNm"/>
+		<result property="lastUpdtPnttm" column="lastUpdtPnttm"/>
+		<result property="lastUpdtNm" column="lastUpdtNm"/>
+    </resultMap>
+
+	<resultMap id="templateZeroMap" type="com.fifth.cms.model.template.TemplateZeroVO" extends="templateZeroListMap">
+		<collection property="contentVO" column="uid=uid, codeHead=codeHead" ofType="templateZeroContentMap" select="getContext" />
+		<collection property="fileVO" column="uid=uid, codeHead=codeHead, requesturl=requesturl" ofType="TemplateZeroFileMap" select="getFileList" />
+    </resultMap>
+
+	<resultMap id="templateZeroContentMap" type="com.fifth.cms.model.template.TemplateZeroContentVO">
+        <id property="uid" column="uid"/>
+		<result property="pid" column="pid"/>
+		<result property="context" column="context"/>
+    </resultMap>
+
+	<resultMap id="TemplateZeroFileMap" type="com.fifth.cms.model.template.TemplateZeroFileVO">
+		<id property="uid" column="uid"/>
+		<result property="code" column="code"/>
+		<result property="pid" column="pid"/>
+		<result property="fsign" column="fsign"/>
+		<result property="fpath" column="fpath"/>
+		<result property="savingFname" column="savingFname"/>
+		<result property="fname" column="fname"/>
+	</resultMap>
+
+	<select id="getPostList" resultMap="templateZeroListMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT *, #{tableCode} as `codeHead`, #{requesturl} as `requesturl`
+		FROM `${tableCode}_post`
+		ORDER BY frstRegistPnttm DESC, uid DESC
+		LIMIT #{startPoint}, #{limit};	
+	</select>
+
+	<select id="getPost" resultMap="templateZeroMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT *, #{tableCode} as `codeHead`, #{requesturl} as `requesturl`
+		FROM `${tableCode}_post`
+		WHERE uid = #{uid};
+	</select>
+
+	<select id="getContext" resultMap="templateZeroContentMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT * FROM `${tableCode}_context` WHERE pid = #{uid};
+	</select>
+
+	<select id="getFileList" resultMap="TemplateZeroFileMap">
+		
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT	*, #{requesturl} as `requesturl`
+		FROM	${tableCode}_FILE
+		WHERE	pid = #{uid}
+	
+	</select>
+
+	<select id="getViewLikeDislikePost" resultMap="templateZeroMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT viewNum, like, dislike, #{requesturl} as `requesturl` FROM `${tableCode}_post` WHERE uid = #{uid};
+	</select>
+
+	<select id="selectPostMaxCode" resultType="String">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT 
+			(
+		    case
+				when (select MAX(codeHead) from `${tableCode}_post`) is null then '0'
+		        else (select MAX(codeHead) from `${tableCode}_post`)
+		    end
+		    ) as maxCode
+		FROM dual
+	</select>
+
+	<select id="selectPostCount" resultType="int">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT count(*) FROM `${tableCode}_post`;
+	</select>
+
+	<insert id="insertPost">	
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		INSERT INTO `${tableCode}_post`
+		(
+			code,
+			notice_chk,
+			title,
+			writerNick,
+			frstRegistPnttm,
+			frstRegistNm
+		) VALUES(
+			#{tableCode},
+			#{notice_chk},
+			#{title},
+			#{writerNick},
+			current_timestamp(),
+			#{frstRegistNm}
+		);
+		<selectKey keyProperty="uid" resultType="string" order="AFTER">
+			<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+			SELECT uid FROM `${tableCode}_post` WHERE code = #{tableCode} ORDER BY frstRegistPnttm DESC, uid DESC LIMIT 1;
+		</selectKey>
+	</insert>
+
+	<insert id="insertContent">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		INSERT INTO `${tableCode}_context`
+		(
+			pid,
+			context
+		) VALUES(
+			#{uid},
+			#{processContext}
+		);
+		<selectKey keyProperty="contentuid" resultType="string" order="AFTER">
+			<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+			SELECT uid FROM `${tableCode}_context` WHERE pid = #{uid};
+		</selectKey>
+	</insert>
+
+	<update id="updatePost">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_post` SET
+			title = #{title},
+			likeOptionPath = #{likeOptionPath},
+			lastUpdtPnttm = current_timestamp(),
+			lastUpdtNm = #{lastUpdtNm}
+		WHERE uid = #{uid};
+	</update>
+
+	<update id="updateContent">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_context` SET context = #{processContext} WHERE pid = #{uid};
+	</update>
+
+	<update id="updateLikeOptionPath">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_post` SET likeOptionPath = #{likeOptionPath} WHERE uid = #{uid};
+	</update>
+
+	<update id="disablePost">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_post` SET del_chk = 'Y' WHERE uid = #{uid};
+	</update>
+
+	<update id="restorePost">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_post` SET del_chk = 'N' WHERE uid = #{uid};
+	</update>
+
+	<update id="plusViewNum">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_post` SET viewNum = viewNum + 1 WHERE uid = #{uid};
+	</update>
+
+	<delete id="deletePost">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		DELETE FROM `${tableCode}_post` WHERE uid = #{uid};
+	</delete>
+
+	<delete id="deleteContent">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		DELETE FROM `${tableCode}_context` WHERE pid = #{uid};
+	</delete>
+
+	<delete id="deleteFile">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		DELETE FROM `${tableCode}_file` WHERE pid = #{uid};
+	</delete>
+
+</mapper>

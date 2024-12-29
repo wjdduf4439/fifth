@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fifth.cms.mapper.admin.TemplateZeroDDLMapper">
+
+
+	<update id="createTemplateZeroPostTable" parameterType="java.util.HashMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code)"/>
+
+		CREATE TABLE ${tableCode}_post (
+			`uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '고유번호',
+			`code` varchar(20) NOT NULL COMMENT '코드명은 ${tableCode}',
+			`del_chk` enum('Y','N') DEFAULT 'N',
+			`notice_chk` enum('Y','N') DEFAULT 'N' COMMENT '공지사항여부',
+			`title` varchar(250) DEFAULT NULL COMMENT '제목',
+			`writerNick` varchar(50) DEFAULT NULL COMMENT '작성자 ID',
+			`viewNum` int(11) NOT NULL DEFAULT '0' COMMENT '조회수',
+			`like` int(11) DEFAULT '0' COMMENT '좋아요수',
+			`dislike` int(11) DEFAULT '0' COMMENT '싫어요수',
+			`likeOptionPath` varchar(250) DEFAULT NULL COMMENT '좋아요 옵션 경로',
+			`frstRegistPnttm` datetime DEFAULT NULL COMMENT '최초 게시물 작성시간',
+			`frstRegistNm` varchar(50) DEFAULT NULL COMMENT '최초 게시물 작성자',
+			`lastUpdtPnttm` datetime DEFAULT NULL COMMENT '최종 게시물 수정시간',
+			`lastUpdtNm` varchar(50) DEFAULT NULL COMMENT '최종 게시물 수정자',
+			PRIMARY KEY (`uid`),
+			INDEX idx_title (`title`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='사이트관리 >> 게시판관리 >> ${ name } >> 생성된 테이블\\r\\n';
+		
+	</update>
+
+	<update id="createTemplateZeroContextTable" parameterType="java.util.HashMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code)"/>
+
+		CREATE TABLE ${tableCode}_context (
+			`uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '고유번호',
+			`pid` int(11) DEFAULT NULL COMMENT '게시물 고유번호 - 해당 코드의 post 테이블의 uid',
+			`context` longtext COMMENT '내용',
+			PRIMARY KEY (`uid`),
+			FULLTEXT INDEX ft_idx_context (`context`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='사이트관리 >> 게시판관리 >> ${ name } >> post 게시물의 내용 테이블';
+		
+	</update>
+
+	<update id="createTemplateZeroFileTable" parameterType="java.util.HashMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code)"/>
+
+		CREATE TABLE ${tableCode}_file (
+			`uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '고유번호',
+			`code` varchar(20) NOT NULL COMMENT '코드명은 ${tableCode}',
+			`pid` int(11) DEFAULT NULL COMMENT '게시물 고유번호 - 해당 코드의 post 테이블의 uid',
+			`fsign` int(11) DEFAULT NULL COMMENT '같은 pid 내에서 중복되는 파일 구분자',
+			`fpath` varchar(200) DEFAULT NULL COMMENT '파일 경로',
+			`savingFname` varchar(100) DEFAULT NULL COMMENT '파일 저장소에 저장된 파일명',
+			`fname` varchar(200) DEFAULT NULL COMMENT '업로드할시 실제 파일명',
+			PRIMARY KEY (`uid`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='사이트관리 >> 게시판관리 >> ${ name } >> 첨부파일 테이블';
+		
+	</update>
+
+	<update id="createTemplateZeroReplyTable" parameterType="java.util.HashMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code)"/>
+
+		CREATE TABLE ${tableCode}_reply (
+			`uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '고유번호',
+			`pid` int(11) DEFAULT NULL COMMENT '댓글이 작성된 post 테이블의 uid',
+			`writerNick` varchar(20) DEFAULT NULL COMMENT '댓글 작성자',
+			<!-- `tagRepCode` varchar(20) DEFAULT NULL COMMENT '댓글의 답글 대상 태그 코드', -->
+			`momRepUid` int(11) DEFAULT NULL COMMENT '댓글의 답글 부모 코드_위치 좌표 담당',
+			`tagRepUid` int(11) DEFAULT NULL COMMENT '댓글의 답글 대상 id',
+			`context` text COMMENT '댓글 내용',
+			`like` int(11) NOT NULL DEFAULT '0' COMMENT '좋아요수',
+			`dislike` int(11) NOT NULL DEFAULT '0' COMMENT '싫어요수',
+			`likeOptionPath` varchar(250) DEFAULT NULL COMMENT '좋아요 옵션 경로',
+			`frstRegistPnttm` datetime DEFAULT NULL COMMENT '최초 덧글 작성시간',
+			`lastUpdtPnttm` datetime DEFAULT NULL COMMENT '최종 덧글 수정시간',
+			PRIMARY KEY (`uid`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='${ name } 댓글 테이블';
+	</update>
+
+	<update id="dropTemplateZeroPostTable" parameterType="java.util.HashMap">
+		DROP TABLE IF EXISTS ${ @com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code) }_post
+	</update>
+
+	<update id="dropTemplateZeroContextTable" parameterType="java.util.HashMap">
+		DROP TABLE IF EXISTS ${ @com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code) }_context
+	</update>
+
+	<update id="dropTemplateZeroFileTable" parameterType="java.util.HashMap">
+		DROP TABLE IF EXISTS ${ @com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code) }_file
+	</update>
+
+	<update id="dropTemplateZeroReplyTable" parameterType="java.util.HashMap">
+		DROP TABLE IF EXISTS ${ @com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code) }_reply
+	</update>
+
+
+
+</mapper>

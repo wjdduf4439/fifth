@@ -1,0 +1,102 @@
+정보
+	docker 이미지 조회 : docker images
+	docker 이미지 삭제 : docker rmi %이미지 아이디%
+
+한줄 코드 배포
+	gradle clean build; if ($?) { ./gradlew bootJar --stacktrace --info; if ($?) { docker build -t fifth_gradle .; if ($?) { docker run -p 9005:9005 -v C:\crud_upload:/home/ec2-user/fifth_FileDir --name fifth_container fifth_gradle --network host } } }
+	gradle clean build; if ($?) { ./gradlew bootJar --stacktrace --info; if ($?) { docker build -t fifth_gradle .; if ($?) { ./run_docker.bat } } }
+
+1. 그래들 배포파일 생성
+	./gradlew bootJar --stacktrace --info
+
+		gradlew.bat build
+		해당 루트 디렉터리의 .\build\libs 아래에 fifth-0.0.1-SNAPSHOT.jar 파일이 생성된다.
+		java -jar .\build\libs\fifth-0.0.1-SNAPSHOT.jar
+
+2. 도커 실행 후 다음 명령어 입력
+	docker build -t fifth_gradle .
+	docker run -p 9005:9005 -v C:\crud_upload:/home/ec2-user/fifth_FileDir fifth_gradle --name fifth_container fifth_gradle --network host
+
+	포트 입력시 10080 포트 사용하지 말기 < 크롬에서 차단함
+
+* Java Language Support 익스텐션 사용시, "java.format.enabled": false 옵션 추가하기
+	https://github.com/microsoft/vscode-java-pack/issues/300
+
+
+sdk(sdkman) 설치 후 springboot 프로젝트 생성-------------------------------------------------------------------------------------------------------
+
+1. sdk 설치
+	https://www.7-zip.org/ 로 들어가서 설치 - 64, 86프로세스 기반 선택
+
+2. 7-zip 환경변수 등록
+	C:\Program Files\7-Zip 을 환경변수에 등록
+
+3. 실행 테스트 < git bash로만 실행
+	설치된 경로의 7z.exe를 zip.exe로 하나 더 복사하여 생성한다.
+	Git bash 터미널을 재오픈 후 zip 명령을 수행하여 정상 동작하는지 확인한다.
+	where zip
+	zip -version < 에러가 날수있는데 무시
+
+4. sdkman 설치
+	curl -s "https://beta.sdkman.io" | bash
+	설치 후 git bash를 껐다가 다시 켜기
+
+5. sdk 테스트 
+	sdk list < 프로세스 실행이 오래걸림, sdk에서 설치가능한 프로그램의 리스트를 보여줌
+	sdk list springboot < 스프링부트 설치 버전을 보여줌
+		둘다 vim 편집기로 나타나므로 나갈때는 :q로 입력하기
+	
+6. springboot 프로젝트 설치
+
+	springboot 3.3.0으로 설치
+		sdk install springboot 3.3.0
+	설치 폴더로 이동
+		cd D:\spring_workspace
+	설치 커맨드
+		spring init --build=gradle --type=gradle-project --dependencies=web --boot-version=3.3.0 fifth
+
+
+
+
+
+
+
+Vmmem 메모리 할당 문제-------------------------------------------------------------------------------------------------------
+docker stats 로 docker container id와 memory 확인
+
+	CONTAINER ID   NAME                CPU %     MEM USAGE / LIMIT    MEM %     NET I/O         BLOCK I/O   PIDS
+	c7105588bf38   practical_mestorf   0.08%     243.7MiB / 15.6GiB   1.53%     121kB / 186kB   0B / 0B     49
+
+	wsl --shutdown
+
+	확인
+
+	이유?
+		리눅스에서 파일 액세스의 정보를 WSL2에서 배당받은 메모리에 보존한다.
+		이는 파일 열람을 할 때마다 매번 발생한다.
+		리눅스의 배당받은 메모리가 한계에 달한다.
+		WSL2가 메모리를 추가 할당한다.
+		리눅스가 배당받은 메모리가 한계에 달한다.
+		무한 악순환
+
+		이렇다고 한다,,, 
+​
+		따라서 wsl2 메모리를 제한해주어야 한다.
+		C:\Users\{UserName} > C:\Users\user 여기서 .wslconfig파일을 만들어 설정값을 주면 된다.
+		출처: https://eddypark.tistory.com/entry/Docker-desktop-메모리-관리 [IT's About Eddy:티스토리]
+
+
+docker logs 문제-------------------------------------------------------------------------------------------------------
+docker logs [OPTIONS] CONTAINER
+
+
+
+cursor ide 문제-------------------------------------------------------------------------------------------------------
+	shortcut
+		기존 ctrl + shift + l > 커서 채팅 질문창 이동
+			이었는데
+		ctrl + shift + k > 커서 채팅 질문창 이동으로 바꾸고
+		ctrl + shift + l > 동일한 단어 타겟 으로 바꾸었다.
+
+
+윈도우 터미널 위치-------------------------------------------------------------------------------------------------------

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fifth.cms.mapper.admin.CodeHeadMapper">
+
+	<resultMap id="codeHeadMap" type="com.fifth.cms.model.admin.CodeHeadVO">
+        <id property="uid" column="uid"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="comment" column="comment"/>
+		<result property="del_chk" column="del_chk"/>
+		<result property="templateType" column="templateType"/>
+		<result property="optionPath" column="optionPath"/>
+		<result property="signdate" column="signdate"/>
+    </resultMap>
+
+	<select id="selectCodeHeadList" resultMap="codeHeadMap">
+		SELECT *, #{requesturl} as `requesturl`
+		FROM `CODEHEAD`
+		ORDER BY signdate DESC, uid DESC
+		limit #{startPoint}, #{limit};	
+	</select>
+
+	<select id="selectCodeHeadOne" resultMap="codeHeadMap">
+		SELECT *, #{requesturl} as `requesturl` FROM `CODEHEAD` WHERE uid = #{uid};
+	</select>
+
+	<select id="selectCodeHeadOneforCode" resultMap="codeHeadMap">
+		SELECT *, #{requesturl} as `requesturl`
+		FROM `CODEHEAD` 
+		WHERE	1=1
+		<if test="code != null"> and code = #{code} </if>	
+		<if test="code == null and codeHead != null"> and code = #{codeHead} </if>
+	</select>
+
+	<select id="selectCodeHeadMaxCode" resultType="String">
+		SELECT 
+			(
+		    case
+				when (select MAX(code) from CODEHEAD) is null then '0'
+		        else (select MAX(code) from CODEHEAD)
+		    end
+		    ) as maxCode
+		FROM dual
+	</select>
+
+	<select id="selectCodeHeadCount" resultType="int">
+		SELECT count(*) FROM CODEHEAD;
+	</select>
+
+	<insert id="insertCodeHead">
+		INSERT INTO CODEHEAD (
+			code,
+			name,
+			comment,
+			templateType,
+			skinType,
+			optionPath,
+			signdate
+		) SELECT 
+			#{code},
+			#{name},
+			#{comment},
+			#{templateType},
+			#{skinType},
+			#{optionPath},
+			current_timestamp()
+		FROM dual
+		WHERE NOT EXISTS (
+			SELECT 1 
+			FROM CODEHEAD 
+			WHERE code = #{code}
+    	);
+		<selectKey keyProperty="uid" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateCodeHead">
+		UPDATE CODEHEAD SET
+			code = #{code},
+			name = #{name},
+			comment = #{comment},
+			templateType = #{templateType},
+			skinType = #{skinType},
+			optionPath = #{optionPath}
+		WHERE uid = #{uid};
+	</update>
+
+	<update id="disableCodeHead">
+		UPDATE CODEHEAD SET del_chk = 'Y' WHERE uid = #{uid};
+	</update>
+
+	<update id="restoreCodeHead">
+		UPDATE CODEHEAD SET del_chk = 'N' WHERE uid = #{uid};
+	</update>
+
+	<delete id="deleteCodeHead">
+		DELETE FROM CODEHEAD WHERE uid = #{uid};
+	</delete>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fifth.cms.mapper.template.TemplateUtilMapper">
+
+	<update id="updateLikeOptionPath">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_post` SET likeOptionPath = #{likeOptionPath} WHERE uid = #{uid};
+	</update>
+
+	<update id="plusLike">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_post` SET `like` = `like` + 1 WHERE uid = #{uid};
+	</update>
+
+	<update id="plusDislike">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_post` SET `dislike` = `dislike` + 1 WHERE uid = #{uid};
+	</update>
+
+	<update id="plusReplyLike">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_reply` SET `like` = `like` + 1 WHERE uid = #{uid};
+	</update>
+
+	<update id="plusReplyDislike">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_reply` SET `dislike` = `dislike` + 1 WHERE uid = #{uid};
+	</update>
+
+</mapper>

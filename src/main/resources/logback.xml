@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+	<!-- 변수 정의 -->
+	<property name="LOG_DIR" value="/dev/log" />
+	<property name="LOG_PATH_NAME" value="${LOG_DIR}/data.log" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern> %highlight(%-5level) --- %(%logger{150}) : %msg%n </pattern>
+            <!-- <pattern> %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta(%-4relative) >>> [ %thread{10} ] %cyan(%logger{20}) : %msg%n </pattern> -->
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH_NAME}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>labatory.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-4relative --- [ %thread{10} ] %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+	<logger name="jdbc.sqlonly" level="TRACE"/>
+	<logger name="jdbc.sqltiming" level="OFF"/>
+	<logger name="jdbc.audit" level="OFF"/>
+	<logger name="jdbc.resultset" level="OFF"/>
+	
+	<logger name="jdbc.resultsettable" level="OFF"/>
+	
+	<logger name="org.thymeleaf" level="OFF"/>
+	<logger name="org.hibernate" level="OFF"/>
+	
+	<logger name="log4jdbc.log4j2" level="OFF"/>
+	<logger name="log4jdbc.debug" level="OFF"/>
+	
+	<logger name="com.zaxxer.hikari" level="OFF"/>
+	<logger name="org.springframework.jndi" level="OFF"/>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="FATAL" />
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="FATAL" />
+	</logger>
+	<!-- spring security 로그 -->
+	<logger name="org.springframework.security">
+		<level value="FATAL" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="FATAL" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="FATAL" />
+	</logger>
+
+    <!-- MyBatis 로그 설정 추가 -->
+    <logger name="org.mybatis" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+	
+
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/> <!-- Console에 로그를 출력하고자 할 때 사용 -->
+        <!-- <appender-ref ref="FILE"/> --> <!-- File로 로그를 남기고자 할 때 사용 -->
+    </root>
+
+</configuration>

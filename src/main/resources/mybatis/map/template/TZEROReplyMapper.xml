@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fifth.cms.mapper.template.TZERO.TZEROReplyMapper">
+
+	<resultMap id="templateZeroListMap" type="com.fifth.cms.model.template.TemplateZeroReplyVO">
+		<id property="uid" column="uid"/>
+		<result property="pid" column="pid"/>
+		<result property="writerNick" column="writerNick"/>
+		<!-- <result property="tagRepCode" column="tagRepCode"/> -->
+		<result property="momRepUid" column="momRepUid"/>
+		<result property="tagRepUid" column="tagRepUid"/>
+		<result property="context" column="context"/>
+		<result property="like" column="like"/>
+		<result property="dislike" column="dislike"/>
+		<result property="likeOptionPath" column="likeOptionPath"/>
+		<result property="frstRegistPnttm" column="frstRegistPnttm"/>
+		<result property="lastUpdtPnttm" column="lastUpdtPnttm"/>
+	</resultMap>
+
+	<select id="getReplyList" resultMap="templateZeroListMap">	
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT * 
+		FROM ${tableCode}_REPLY
+		WHERE pid = #{uid}
+		ORDER BY momRepUid DESC, frstRegistPnttm ASC
+		LIMIT #{startPoint}, #{limit};	
+
+	</select>
+
+	<select id="selectReplyCount" resultType="int">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		SELECT COUNT(*) FROM ${tableCode}_REPLY WHERE pid = #{uid};
+	</select>
+
+	<insert id="insertReply">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		INSERT INTO ${tableCode}_REPLY (
+			pid,
+			writerNick,
+			tagRepUid,
+			context,
+			likeOptionPath,
+			frstRegistPnttm
+		) VALUES (
+			#{pid},
+			#{writerNick},
+			#{tagRepUid},
+			#{context},
+			#{likeOptionPath},
+			current_timestamp()
+		)
+		<!-- 다른 세션에 영향받지 않는 마지막 삽입된 uid 가져오기 -->
+		<selectKey keyProperty="uid" resultType="string" order="AFTER">
+			select last_insert_id();
+		</selectKey>
+	</insert>
+
+	<update id="updateReply">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_reply` 
+			SET	context = #{context},
+				lastUpdtPnttm = current_timestamp()
+		WHERE uid = #{uid};
+	</update>
+
+	<update id="updateReplyMomRepCode">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		UPDATE `${tableCode}_reply` 
+			SET	momRepUid = #{momRepUid}
+		WHERE uid = #{uid};
+	</update>
+
+	<delete id="deleteReply">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		DELETE FROM `${tableCode}_reply` WHERE uid = #{uid};
+	</delete>
+
+</mapper>

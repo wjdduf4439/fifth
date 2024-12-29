@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fifth.cms.mapper.login.AccessMapper">
+
+	<resultMap id="AccessMap" type="com.fifth.cms.model.login.AccessVO">
+        <id property="code" column="code"/>
+		<result property="id" column="id"/>
+		<result property="pw" column="pw"/>
+		<result property="nick" column="nick"/>
+		<result property="role" column="role"/>
+		<result property="authority" column="authority"/>
+		<result property="refreshToken" column="refreshToken"/>
+    </resultMap>
+
+	<!-- 사용자 접속 홈 정보 가져오기 -->
+	<select id="loginHomeMapper" parameterType="String" resultMap="AccessMap">
+		select * from FIFTH_ACCESS
+	</select>
+
+	<!-- 사용자 아이디 중복 체크 -->
+	<select id="accIdCount" parameterType="String" resultType="int">
+		select count(`code`) from FIFTH_ACCESS WHERE id = #{ id }
+	</select>
+	
+	<!-- 사용자 코드 최대값 가져오기 -->
+	<select id="accCodeMax" resultType="String">
+		select max(`code`) from FIFTH_ACCESS
+	</select>
+	
+	<!-- 사용자 정보 가져오기 -->
+	<select id="selectAccessOne" parameterType="String" resultMap="AccessMap">
+		select * from FIFTH_ACCESS WHERE id = #{ id }
+	</select>
+
+	<!-- 사용자 정보 가져오기 -->
+	<select id="selectAccessOneforCode" parameterType="String" resultMap="AccessMap">
+		select * from FIFTH_ACCESS WHERE code = #{ code }
+	</select>
+
+	<!-- 사용자 접속여부 체크 -->
+	<select id="checkAccess" parameterType="HashMap" resultType="int">
+		select count(`code`) from FIFTH_ACCESS WHERE code = #{ accessCode } and refreshToken = #{ refreshToken } and id = #{ accessId } and nick = #{ nick }
+	</select>
+
+	<!-- 사용자 접속여부 체크 -->
+	<select id="checkAdminOne" parameterType="HashMap" resultMap="AccessMap">
+		select * from FIFTH_ACCESS WHERE code = #{ accessCode } and refreshToken = #{ refreshToken } and authority = 'admin'
+	</select>
+
+	<!-- 사용자 정보 입력 -->
+	<insert id="accRegist" >
+		 	
+			INSERT INTO FIFTH_ACCESS (
+				code
+				,id
+				,pw
+				,nick
+				,role
+				,authority
+			) VALUES (
+				#{ code }
+				,#{ id }
+				,#{ pw }
+				,#{ nick }
+				,#{ role }
+				,#{ authority }
+			)
+			<!-- 
+			<selectKey resultType="String" keyProperty="resultCode" order="AFTER" >
+				select createCode(#{ maxCode }, concat(#{ primaryCode },'_')) AS resultCode
+			</selectKey>
+			 -->
+	</insert>
+
+	<!-- 사용자 접속 시 refreshToken 입력 -->
+	<update id="updateRefreshToken" >
+			UPDATE FIFTH_ACCESS SET
+				refreshToken = #{ refreshToken }
+			WHERE code = #{ code }
+	</update>
+
+	<!-- 사용자 접속 종료시 refreshToken 초기화 -->
+	<update id="updateBlankRefreshToken" >	
+			UPDATE FIFTH_ACCESS SET
+				refreshToken = ''
+			WHERE code = #{ accessCode }
+			and refreshToken = #{ refreshToken }
+	</update>
+
+</mapper>

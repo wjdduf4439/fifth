@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fifth.cms.mapper.admin.TopMenuMapper">
+
+
+	<!-- getList에 적용하기 위한 parameter맵을 새로 만들어서, 기존 stringjson의 map에서 처음 들어오는 depth 키의 value를 제어한다 > 실패 -->
+	<!-- 
+	<parameterMap id="childNodeParams" type="java.util.HashMap">
+	    <parameter property="depth" javaType="int" mode="IN" jdbcType="INTEGER"/>
+	</parameterMap>
+ 	-->
+	<resultMap id="MenuMap" type="com.fifth.cms.model.admin.MenuVO">
+        <id property="uid" column="uid"/>
+		<result property="codeHead" column="codeHead"/>
+		<result property="pCode" column="pCode"/>
+		<result property="path" column="path"/>
+		<result property="depth" column="depth"/>
+		<result property="sort" column="sort"/>
+		<result property="title" column="title"/>
+		<result property="del_chk" column="del_chk"/>
+		<result property="visible" column="visible"/>
+		<result property="pathType" column="pathType"/>
+		<result property="targetOption" column="targetOption"/>
+		<result property="frstRegistPntim" column="frstRegistPntim"/>
+		<result property="frstRegistNm" column="frstRegistNm"/>
+		<result property="lastUpdtPnttm" column="lastUpdtPnttm"/>
+		<result property="lastUpdtNm" column="lastUpdtNm"/>
+		<collection property="childNode" column="uid" ofType="MenuMap" select="getChildNode" />
+    </resultMap>
+    
+    <resultMap id="ViewMenuMap" type="com.fifth.cms.model.admin.MenuVO">
+        <id property="uid" column="uid"/>
+		<result property="codeHead" column="codeHead"/>
+		<result property="pCode" column="pCode"/>
+		<result property="path" column="path"/>
+		<result property="depth" column="depth"/>
+		<result property="sort" column="sort"/>
+		<result property="title" column="title"/>
+		<result property="del_chk" column="del_chk"/>
+		<result property="visible" column="visible"/>
+		<result property="pathType" column="pathType"/>
+		<result property="targetOption" column="targetOption"/>
+		<result property="frstRegistPntim" column="frstRegistPntim"/>
+		<result property="frstRegistNm" column="frstRegistNm"/>
+		<result property="lastUpdtPnttm" column="lastUpdtPnttm"/>
+		<result property="lastUpdtNm" column="lastUpdtNm"/>
+		<collection property="childNode" column="uid" ofType="MenuMap" select="getViewChildNode" />
+    </resultMap>
+    
+    <resultMap id="GetMenuMap" type="com.fifth.cms.model.admin.MenuVO">
+        <id property="uid" column="uid"/>
+        <result property="codeHead" column="codeHead"/>
+		<result property="pCode" column="pCode"/>
+		<result property="path" column="path"/>
+		<result property="depth" column="depth"/>
+		<result property="sort" column="sort"/>
+		<result property="title" column="title"/>
+		<result property="del_chk" column="del_chk"/>
+		<result property="visible" column="visible"/>
+		<result property="pathType" column="pathType"/>
+		<result property="targetOption" column="targetOption"/>
+		<result property="frstRegistPntim" column="frstRegistPntim"/>
+		<result property="frstRegistNm" column="frstRegistNm"/>
+		<result property="lastUpdtPnttm" column="lastUpdtPnttm"/>
+		<result property="lastUpdtNm" column="lastUpdtNm"/>
+    </resultMap>
+    
+	<select id="getList" resultMap="MenuMap" parameterType="java.util.HashMap">
+		
+        SELECT	*
+		FROM	TOPMENUTABLE
+		WHERE	1=1
+		and		depth = 0
+		order by sort;
+	
+	</select>
+	
+	<select id="getView" resultMap="ViewMenuMap" parameterType="java.util.HashMap">
+		
+        SELECT	*
+		FROM	TOPMENUTABLE
+		WHERE	1=1
+		and		depth = 0
+		and		del_chk = 'N' and visible = 'Y'
+		order by sort;
+	
+	</select>
+	
+	<select id="getChildNode" resultMap="MenuMap" parameterType="java.util.HashMap">
+		
+        SELECT	*
+		FROM	TOPMENUTABLE
+		WHERE	1=1
+		and		pCode = #{ uid }
+		order by sort;
+	
+	</select>
+	
+	<select id="getViewChildNode" resultMap="ViewMenuMap" parameterType="java.util.HashMap">
+		
+        SELECT	*
+		FROM	TOPMENUTABLE
+		WHERE	1=1
+		and		pCode = #{ uid }
+		and		del_chk = 'N' and visible = 'Y'
+		order by sort;
+	
+	</select>
+	
+	
+	<select id="get" resultMap="GetMenuMap" parameterType="java.util.HashMap">
+		
+        SELECT	*
+		FROM	TOPMENUTABLE
+		WHERE	uid = #{ uid }
+	
+	</select>
+	
+	<select id="getTargetNode" resultMap="MenuMap" parameterType="java.util.HashMap">
+		
+        SELECT	uid, pCode, depth, sort
+		FROM	TOPMENUTABLE
+		WHERE	uid = #{ targetUid }
+	
+	</select>
+	
+	<select id="getDraggedNode" resultMap="MenuMap" parameterType="java.util.HashMap">
+		
+        SELECT	uid, pCode, depth, sort
+		FROM	TOPMENUTABLE
+		WHERE	uid = #{ draggedUid }
+	
+	</select>
+	
+	<select id="selectTableMenuListMax" resultType="String" parameterType="java.util.HashMap">
+		SELECT max(uid)
+		FROM TOPMENUTABLE
+	</select>
+	
+	<select id="selectTableMenuListSortMax" resultType="String" parameterType="java.util.HashMap">
+		SELECT 
+		    case
+				when (
+						select MAX(sort)
+						from TOPMENUTABLE
+						where 1=1 
+						<!--insert 작업일 경우-->
+						<if test="targetDepth == null"> 
+							and depth = #{depth}
+							<if test="pCode == null"> and pCode is null </if><!-- 최상위 메뉴일 경우 -->
+							<if test="pCode != null"> and pCode = #{pCode} </if><!-- 하위 메뉴일 경우 -->
+						</if>
+						<if test="targetDepth != null"> <!--move 작업일 경우-->
+							and depth = #{targetDepth}
+							and pCode = #{targetUid}
+						</if>
+					) is null then '0'
+		        else (
+						select MAX(sort) + 1 
+						from TOPMENUTABLE
+						where 1=1 
+						<!--insert 작업일 경우-->
+						<if test="targetDepth == null"> 
+							and depth = #{depth}
+							<if test="pCode == null"> and pCode is null </if><!-- 최상위 메뉴일 경우 -->
+							<if test="pCode != null"> and pCode = #{pCode} </if><!-- 하위 메뉴일 경우 -->
+						</if>
+						<if test="targetDepth != null"> <!--move 작업일 경우-->
+							and depth = #{targetDepth}
+							and pCode = #{targetUid}
+						</if>
+					)
+		    end as maxSort
+	</select>
+	
+	<insert id="insertMenuRecord" parameterType="java.util.HashMap">
+		 	
+			INSERT INTO TOPMENUTABLE (
+				codeHead
+				,pCode
+				,depth
+				,sort
+				,title
+				,frstRegistPnttm
+				,frstRegistNm
+
+			) VALUES (
+				
+				#{ codeHead }
+				,#{ pCode }
+				,${ depth }
+				,${ sort }
+				,#{ title }
+				,current_timestamp()
+				,#{ frstRegistNm }
+			)
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT 1
+		</selectKey>
+	</insert>
+	
+	<update id="renameMenuRecord" parameterType="java.util.HashMap">
+		 
+		UPDATE	TOPMENUTABLE
+		SET
+			title = #{title}
+			
+		WHERE uid = #{ uid }
+			
+	</update> 
+	
+	<update id="updateMenuRecord" parameterType="java.util.HashMap">
+		 
+		UPDATE	TOPMENUTABLE
+			
+		SET
+			title = #{title}
+			,path = #{path}
+			,pathType = #{pathType}
+			,targetOption = #{targetOption}
+			,lastUpdtPnttm = current_timestamp()
+			,lastUpdtNm = #{lastUpdtNm}
+		WHERE uid = #{uid}
+			
+	</update>
+	
+	
+	<update id="updateNodeMoving" parameterType="java.util.HashMap">
+		
+		UPDATE	TOPMENUTABLE
+		SET
+		<!-- 타겟의 노드에 dragged 노드의 위치정보를 입력 -->
+		<if test="moveProcessType != null and 'target'.equals(moveProcessType) ">
+			pCode = #{ targetPcode },
+			depth = #{ targetDepth },
+			sort = #{ targetSort }
+			WHERE uid = #{ draggedUid }
+		</if>
+		<!-- 드래그의 노드에 target 노드의 위치정보를 입력 -->
+		<if test="moveProcessType != null and 'dragged'.equals(moveProcessType) ">
+			pCode = #{ draggedPcode },
+			depth = #{ draggedDepth },
+			sort = #{ draggedSort }
+			WHERE uid = #{ targetUid }
+		</if>
+	
+	</update>
+
+	<update id="updateNodeSortAfterPosition" parameterType="java.util.HashMap">
+		UPDATE	TOPMENUTABLE
+		SET
+			sort = sort + 1
+		WHERE	1=1
+		<if test="targetPcode != null"> and		pCode = #{ targetPcode } </if>
+		<if test="targetPcode == null"> and		pCode is null </if>
+			and		depth = #{ targetDepth }
+			and		sort > #{ targetSort }
+	</update>
+
+	<update id="updateNodeInto" parameterType="java.util.HashMap">
+		UPDATE	TOPMENUTABLE
+		SET
+			pCode = #{ targetUid },
+			depth = #{ targetDepth },
+			sort = #{ targetSort }
+		WHERE	uid = #{ draggedUid }
+	</update>
+
+	<update id="setTargetSortMenuRecord" parameterType="java.util.HashMap">
+		
+		UPDATE	TOPMENUTABLE
+		SET sort = #{ targetSort }
+		WHERE uid = #{ draggedUid }
+	
+	</update>
+	
+	<update id="setDraggedSortMenuRecord" parameterType="java.util.HashMap">
+		
+		UPDATE	TOPMENUTABLE
+		SET sort = #{ draggedSort }
+		WHERE uid = #{ targetUid }
+	
+	</update>
+	
+	
+	<update id="disableMenuRecord" parameterType="java.util.HashMap">
+		
+		UPDATE	TOPMENUTABLE
+		SET del_chk = 'Y'
+		WHERE uid = #{ uid }
+	
+	</update>
+	
+	<delete id="deleteMenuRecord" parameterType="java.util.HashMap">
+		
+		DELETE FROM TOPMENUTABLE
+		WHERE uid = #{ uid }
+	
+	</delete>
+	
+	<update id="restoreMenuRecord" parameterType="java.util.HashMap">
+		
+		UPDATE	TOPMENUTABLE
+		SET del_chk = 'N'
+		WHERE uid = #{ uid }
+	
+	</update>
+	
+</mapper>
+

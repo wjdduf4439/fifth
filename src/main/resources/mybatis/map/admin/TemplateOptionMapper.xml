@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fifth.cms.mapper.admin.TemplateOptionMapper">
+
+	<resultMap id="SiteTypeMap" type="com.fifth.cms.model.admin.SiteTypeVO">
+        <id property="uid" column="uid"/>
+		<result property="formName" column="formName"/>
+		<result property="code" column="code"/>
+		<result property="comment" column="comment"/>
+    </resultMap>
+
+	<resultMap id="SkinTypeMap" type="com.fifth.cms.model.admin.SkinTypeVO">
+        <id property="uid" column="uid"/>
+		<result property="skinName" column="skinName"/>
+		<result property="code" column="code"/>
+		<result property="tCode" column="tCode"/>
+		<result property="comment" column="comment"/>
+    </resultMap>
+
+	<select id="getSiteTpyeList" resultMap="SiteTypeMap" parameterType="java.util.HashMap">
+		
+        SELECT	*, #{requesturl} as `requesturl`
+		FROM	TEMPLATETYPE
+	
+	</select>
+
+	<select id="getSkinTypeList" resultMap="SkinTypeMap" parameterType="java.util.HashMap">
+		
+        SELECT	*, #{requesturl} as `requesturl`
+		FROM	SKINTYPE
+	
+	</select>
+	
+</mapper>
+

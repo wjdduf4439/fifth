@@ -10,6 +10,7 @@ gradle.properties
 DockerFile
 run_docker.sh
 run_docker.bat
+application.yaml
 
 ### STS ###
 .apt_generated

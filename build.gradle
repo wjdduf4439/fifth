@@ -7,6 +7,12 @@ plugins {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
+if (System.getenv('JAVA_HOME')) {
+    org.gradle.java.home = System.getenv('JAVA_HOME')
+} else {
+    println "Warning: JAVA_HOME environment variable is not set."
+}
+
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)

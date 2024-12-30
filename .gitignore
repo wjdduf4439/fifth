@@ -8,6 +8,8 @@ build/
 ### fifth ###
 gradle.properties
 DockerFile
+run_docker.sh
+run_docker.bat
 
 ### STS ###
 .apt_generated

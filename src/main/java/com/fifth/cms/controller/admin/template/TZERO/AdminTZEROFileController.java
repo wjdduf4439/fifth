@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,7 +61,7 @@ public class AdminTZEROFileController {
 		HashMap<String, String> fileValueMap = new HashMap<String, String>();
 		String maxCode = "";
 		
-		fileProcess.makedir(stringJson);	//파일이 있다면 파일경로를 먼저 지정
+		fileProcess.makedir(stringJson, "file");	//파일이 있다면 파일경로를 먼저 지정
 		String savepathString = fileProcess.getPREFIX_URL();
 		String savefileString = "";
 		
@@ -114,12 +115,12 @@ public class AdminTZEROFileController {
             for (MultipartFile file : files) {
             	
             	savefileString = fileProcess.makeSavingFileCode(stringJson.get("codeHead"), i_fileRequest);
-            	System.out.println("insert code: " + stringJson.get("codeHead"));
-				System.out.println("insert pid: " + stringJson.get("uid"));
-            	System.out.println("insert fsign: " + i_fileRequest);
-            	System.out.println("insert fpath: " + savepathString + savefileString);
-            	System.out.println("insert savingFileName " + savefileString);
-            	System.out.println("insert fname " + file.getOriginalFilename());
+            	// System.out.println("insert code: " + stringJson.get("codeHead"));
+				// System.out.println("insert pid: " + stringJson.get("uid"));
+            	// System.out.println("insert fsign: " + i_fileRequest);
+            	// System.out.println("insert fpath: " + savepathString + savefileString);
+            	// System.out.println("insert savingFileName " + savefileString);
+            	// System.out.println("insert fname " + file.getOriginalFilename());
 
 
             	fileValueMap.put("codeHead", stringJson.get("codeHead"));
@@ -163,5 +164,68 @@ public class AdminTZEROFileController {
 		
 		return resultMap;
 	}
+
+
+	@ResponseBody
+	@RequestMapping(value = "/{processMark:contentUploadNoPost}", method = RequestMethod.POST, consumes = "multipart/form-data")
+	public HashMap<String, Object> contentUploadOne(MultipartHttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, String> stringJson, @PathVariable("processMark") String processMark) throws Exception {
+
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("result",  false );
+		Integer result = 0;
+
+		
+		String dirName = "";
+		if("contentUploadNoPost".equals(processMark)) {
+			dirName = environment.getProperty("TEMP_CONTENT_IMAGE_DIR");
+		}
+
+		fileProcess.makedir(stringJson, dirName);	//파일이 있다면 파일경로를 먼저 지정, 등록된 게시물이 없는 경우
+		System.out.println("파일 경로 : " + fileProcess.getPREFIX_URL());
+		String savepathString = fileProcess.getPREFIX_URL();
+		String savefileString = "";
+
+		System.out.println("AdminTZEROFileController contentUpload 작업 전 stringJson : " + stringJson.toString());
+
+
+		Iterator<String> fileRequest = req.getFileNames();
+        int i_fileRequest = 0;
+		String fileType = "";
+		String saveTempContentImageFileString = "";
+        while (fileRequest.hasNext()) {
+            String fileRequestName = fileRequest.next();
+            List<MultipartFile> files = req.getFiles(fileRequestName);
+
+			for (MultipartFile file : files) {
+
+				//System.out.println("file type : " + file.getContentType() + " : " + file.getOriginalFilename() );
+
+				if(	!"image/png".equals(file.getContentType()) &&
+					!"image/jpeg".equals(file.getContentType()) &&
+					!"image/jpg".equals(file.getContentType()) &&
+					!"image/gif".equals(file.getContentType()) &&
+					!"image/webp".equals(file.getContentType())
+					) {
+						resultMap.put("message",  "내용 이미지 업로드 파일 형식에 맞지 않습니다. : " + file.getOriginalFilename() );
+						return resultMap;
+					}
+
+				fileType = fileProcess.getFileType(file.getOriginalFilename().toString().toLowerCase());
+				savefileString = fileProcess.makeTempContentImageFileCode(stringJson.get("codeHead"), i_fileRequest) + fileType;
+				fileProcess.writeFile( file, savefileString );
+				saveTempContentImageFileString += savefileString + ",";
+
+				i_fileRequest++;
+			}
+
+			
+		}
+
+		resultMap.put("result",  true );
+		//저장한 파일명 목록을 추가, 마지막 ',' 제거
+		resultMap.put("saveTempContentImageFileString",  saveTempContentImageFileString.substring(0, saveTempContentImageFileString.length() - 1) );
+		return resultMap;
+	}
+
 
 }

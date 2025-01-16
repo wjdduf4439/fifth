@@ -13,6 +13,15 @@
 		<result property="fname" column="fname"/>
 	</resultMap>
 
+
+	<resultMap id="TemplateZeroContentFileVOMap" type="com.fifth.cms.model.template.TemplateZeroFileVO">
+		<id property="uid" column="uid"/>
+		<result property="code" column="code"/>
+		<result property="pid" column="pid"/>
+		<result property="fpath" column="fpath"/>
+		<result property="fname" column="fname"/>
+	</resultMap>
+
 	<select id="getFile" resultMap="TemplateZeroFileVOMap" parameterType="java.util.HashMap">
 		
 		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
@@ -21,6 +30,13 @@
 		FROM	${tableCode}_FILE
 		WHERE	uid = #{uid}
 	
+	</select>
+
+	<select id="getContextImageFileList" resultMap="TemplateZeroFileVOMap">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		SELECT * 
+		FROM ${tableCode}_CONTEXTFILE
+		WHERE pid = #{uid};
 	</select>
 
 	<select id="getUploadedFileCount" resultType="int" parameterType="java.util.HashMap">
@@ -69,9 +85,34 @@
 		</selectKey>
 	</insert>
 
+	<insert id="insertContextImageFile">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		INSERT INTO ${tableCode}_CONTEXTFILE(
+			code,
+			pid,
+			fpath,
+			fname
+		) VALUES (
+			#{code},
+			#{pid},
+			#{fpath},
+			#{fname}
+		);
+	</insert>
+
 	<delete id="deleteFileRecord">
 		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
-		DELETE FROM ${tableCode}_FILE WHERE uid = #{uid};
+		DELETE FROM ${tableCode}_FILE WHERE pid = #{uid};
+	</delete>
+
+	<delete id="deleteContextImageFile">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		DELETE FROM ${tableCode}_CONTEXTFILE WHERE pid = #{uid};
+	</delete>
+
+	<delete id="deletePostedContextImageFile">
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+		DELETE FROM ${tableCode}_CONTEXTFILE WHERE uid = #{dropPostContentImageFileUid};
 	</delete>
 
 </mapper>

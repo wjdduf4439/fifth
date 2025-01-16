@@ -11,9 +11,11 @@ public interface TemplateZeroDDLMapper {
 	public Integer createTemplateZeroContextTable(HashMap<String, String> stringJson);
 	public Integer createTemplateZeroFileTable(HashMap<String, String> stringJson);
 	public Integer createTemplateZeroReplyTable(HashMap<String, String> stringJson);
+	public Integer createTemplateZeroContentFileTable(HashMap<String, String> stringJson);
 
 	public Integer dropTemplateZeroPostTable(HashMap<String, String> stringJson);
 	public Integer dropTemplateZeroContextTable(HashMap<String, String> stringJson);
 	public Integer dropTemplateZeroFileTable(HashMap<String, String> stringJson);
 	public Integer dropTemplateZeroReplyTable(HashMap<String, String> stringJson);
+	public Integer dropTemplateZeroContentFileTable(HashMap<String, String> stringJson);
 }

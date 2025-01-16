@@ -13,7 +13,6 @@ public class TemplateZeroReplyVO {
 	private String context;
 	private int like;
 	private int dislike;
-	private String likeOptionPath;
 	private Date frstRegistPnttm;
 	private Date lastUpdtPnttm;
 
@@ -41,9 +40,6 @@ public class TemplateZeroReplyVO {
 	public int getDislike() { return dislike; }
 	public void setDislike(int dislike) { this.dislike = dislike; }
 
-	public String getLikeOptionPath() { return likeOptionPath; }
-	public void setLikeOptionPath(String likeOptionPath) { this.likeOptionPath = likeOptionPath; }
-
 	public Date getFrstRegistPnttm() { return frstRegistPnttm; }
 	public void setFrstRegistPnttm(Date frstRegistPnttm) { this.frstRegistPnttm = frstRegistPnttm; }
 
@@ -61,7 +57,6 @@ public class TemplateZeroReplyVO {
 				", context='" + context + '\'' +
 				", like=" + like +
 				", dislike=" + dislike +
-				", likeOptionPath='" + likeOptionPath + '\'' +
 				", frstRegistPnttm=" + frstRegistPnttm +
 				", lastUpdtPnttm=" + lastUpdtPnttm +
 				'}';

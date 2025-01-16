@@ -3,7 +3,6 @@ package com.fifth.cms.util.admin;
 import java.util.HashMap;
 
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fifth.cms.service.admin.TemplateZeroDDLService;
@@ -24,13 +23,13 @@ public class TemplateTableProcess {
 		resultMap.put("result", false);
 
 		System.out.println("TemplateTableProcess createTemplateZeroTable : " + processName + " 전 정보 : " + createTableJson.toString());
-
 			
 			try {
 				templateZeroService.createTemplateZeroPostTable(createTableJson);
 				templateZeroService.createTemplateZeroContextTable(createTableJson);
 				templateZeroService.createTemplateZeroFileTable(createTableJson);
 				templateZeroService.createTemplateZeroReplyTable(createTableJson);
+				templateZeroService.createTemplateZeroContentFileTable(createTableJson);
 			} catch (NullPointerException e) {
 				resultMap.put("message", processName + " 작업에 실패 > 예외 : " + e.getMessage()); return resultMap;
 			} catch (IllegalArgumentException e) {
@@ -55,8 +54,9 @@ public class TemplateTableProcess {
 		int processTwo = templateZeroService.dropTemplateZeroContextTable(dropTableJson);
 		int processThree = templateZeroService.dropTemplateZeroFileTable(dropTableJson);
 		int processFour = templateZeroService.dropTemplateZeroReplyTable(dropTableJson);
+		int processFive = templateZeroService.dropTemplateZeroContentFileTable(dropTableJson);
 
-		if(processOne > 0 && processTwo > 0 && processThree > 0 && processFour > 0) result = 1;
+		if(processOne > 0 && processTwo > 0 && processThree > 0 && processFour > 0 && processFive > 0) result = 1;
 
 		return result;
 	}

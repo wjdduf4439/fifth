@@ -15,10 +15,6 @@ public class TemplateUtilService {
 		this.templateUtilMapper = templateUtilMapper;
 	}
 
-	public Integer updateLikeOptionPath(HashMap<String, String> stringJson) {
-		return templateUtilMapper.updateLikeOptionPath(stringJson);
-	}
-
 	public Integer plusLike(HashMap<String, String> stringJson) {
 		return templateUtilMapper.plusLike(stringJson);
 	}

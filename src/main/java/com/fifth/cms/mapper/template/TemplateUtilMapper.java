@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface TemplateUtilMapper {
 	
-	public Integer updateLikeOptionPath(HashMap<String, String> stringJson);
 	public Integer plusLike(HashMap<String, String> stringJson);
 	public Integer plusDislike(HashMap<String, String> stringJson);
 	public Integer plusReplyLike(HashMap<String, String> stringJson);

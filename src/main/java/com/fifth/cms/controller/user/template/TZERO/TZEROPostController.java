@@ -23,15 +23,15 @@ import jakarta.servlet.http.HttpServletResponse;
 public class TZEROPostController {
 
 	private final Environment environment;
-	private final TZEROPostService tZEROpostService;
+	private final TZEROPostService tZEROPostService;
 
 	public TZEROPostController(Environment environment, TZEROPostService tZEROpostService) {
 		this.environment = environment;
-		this.tZEROpostService = tZEROpostService;
+		this.tZEROPostService = tZEROpostService;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/{processMark:list|one|count|viewLikeDislike}", method = { RequestMethod.POST }, produces = "application/json")
+	@RequestMapping(value = "/{processMark:list|one|count|viewLikeDislike|notice}", method = { RequestMethod.POST }, produces = "application/json")
 	public HashMap<String, Object> list(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, String> stringJson, @PathVariable("processMark")String processMark) {
 
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -39,23 +39,28 @@ public class TZEROPostController {
 
 		if("list".equals(processMark)) {
 			
-			List<TemplateZeroVO> resultList = tZEROpostService.getPostList(stringJson);
+			List<TemplateZeroVO> resultList = tZEROPostService.getPostList(stringJson);
 			resultMap.put("resultList", resultList);
 
 		}else if("one".equals(processMark)) {
 
-			TemplateZeroVO codeHeadVO = tZEROpostService.getPost(stringJson);
+			TemplateZeroVO codeHeadVO = tZEROPostService.getPost(stringJson);
 			resultMap.put("resultList", codeHeadVO);
 
 		}else if("viewLikeDislike".equals(processMark)) {
 
-			TemplateZeroVO codeHeadVO = tZEROpostService.getViewLikeDislikePost(stringJson);
+			TemplateZeroVO codeHeadVO = tZEROPostService.getViewLikeDislikePost(stringJson);
 			resultMap.put("resultList", codeHeadVO);
 
 		}else if("count".equals(processMark)) {
 
-			Integer count = tZEROpostService.selectPostCount(stringJson);
+			Integer count = tZEROPostService.selectPostCount(stringJson);
 			resultMap.put("resultCount", count);
+
+		}else if("notice".equals(processMark)) {
+
+			List<TemplateZeroVO> resultList = tZEROPostService.getNoticePostList(stringJson);
+			resultMap.put("resultList", resultList);
 
 		}
 
@@ -79,7 +84,7 @@ public class TZEROPostController {
 		boolean doProgress = cookieProcess.setTemplateCookie(req, res, stringJson);
 
 		if (doProgress && "viewNum".equals(processMark)) {
-			result = tZEROpostService.plusViewNum(stringJson);	
+			result = tZEROPostService.plusViewNum(stringJson);	
 		}
 		if (result > 0) {
 			// 쿠키 생성 (24시간 유효)

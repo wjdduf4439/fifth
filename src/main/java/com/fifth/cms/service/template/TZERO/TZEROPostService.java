@@ -27,6 +27,10 @@ public class TZEROPostService {
 
 		return tZEROpostTableMapper.getPostList(ObjectJson);
 	}		
+
+	public List<TemplateZeroVO> getNoticePostList(HashMap<String, String> stringJson) {
+		return tZEROpostTableMapper.getNoticePostList(stringJson);
+	}
 	
 	public TemplateZeroVO getPost(HashMap<String, String> stringJson) {
 		return tZEROpostTableMapper.getPost(stringJson);

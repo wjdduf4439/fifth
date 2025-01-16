@@ -53,7 +53,6 @@ public class LikeOptionProcess {
 			IOUtils.closeQuietly(writer);
 
 			likeOptionProcessMap.put("likeOptionPath", fileName);
-			templateUtilService.updateLikeOptionPath(likeOptionProcessMap);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

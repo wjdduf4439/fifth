@@ -13,7 +13,6 @@
 		<result property="context" column="context"/>
 		<result property="like" column="like"/>
 		<result property="dislike" column="dislike"/>
-		<result property="likeOptionPath" column="likeOptionPath"/>
 		<result property="frstRegistPnttm" column="frstRegistPnttm"/>
 		<result property="lastUpdtPnttm" column="lastUpdtPnttm"/>
 	</resultMap>
@@ -44,14 +43,12 @@
 			writerNick,
 			tagRepUid,
 			context,
-			likeOptionPath,
 			frstRegistPnttm
 		) VALUES (
 			#{pid},
 			#{writerNick},
 			#{tagRepUid},
 			#{context},
-			#{likeOptionPath},
 			current_timestamp()
 		)
 		<!-- 다른 세션에 영향받지 않는 마지막 삽입된 uid 가져오기 -->

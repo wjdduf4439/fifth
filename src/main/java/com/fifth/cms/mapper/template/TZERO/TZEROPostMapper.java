@@ -11,6 +11,7 @@ import com.fifth.cms.model.template.TemplateZeroFileVO;
 public interface TZEROPostMapper {
 	
 	public List<TemplateZeroVO> getPostList(HashMap<String, Object> ObjectJson);
+	public List<TemplateZeroVO> getNoticePostList(HashMap<String, String> stringJson);
 	public TemplateZeroVO getPost(HashMap<String, String> stringJson);
 	public TemplateZeroVO getViewLikeDislikePost(HashMap<String, String> stringJson);
 	public List<TemplateZeroFileVO> getFileList(HashMap<String, String> stringJson);

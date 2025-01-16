@@ -140,6 +140,8 @@ public class CodeProcess {
                 orderedMap.put("maxFileUploadNumber", 1);
                 orderedMap.put("fileUploadType", "");
                 orderedMap.put("replyLimit", 10);
+                orderedMap.put("noticeShow", "N");
+                orderedMap.put("viewUnderListShow", "N");
 
 				// LinkedHashMap을 사용하여 JSONObject 생성
                 JSONObject jsonObject = new JSONObject(orderedMap);

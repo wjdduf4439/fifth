@@ -31,6 +31,10 @@ public class TemplateZeroDDLService {
 		return templateZeroMapper.createTemplateZeroReplyTable(stringJson);
 	}	
 
+	public Integer createTemplateZeroContentFileTable(HashMap<String, String> stringJson) {
+		return templateZeroMapper.createTemplateZeroContentFileTable(stringJson);
+	}
+
 	public Integer dropTemplateZeroPostTable(HashMap<String, String> stringJson) {
 		return templateZeroMapper.dropTemplateZeroPostTable(stringJson);
 	}		
@@ -46,5 +50,9 @@ public class TemplateZeroDDLService {
 	public Integer dropTemplateZeroReplyTable(HashMap<String, String> stringJson) {
 		return templateZeroMapper.dropTemplateZeroReplyTable(stringJson);
 	}			
+
+	public Integer dropTemplateZeroContentFileTable(HashMap<String, String> stringJson) {
+		return templateZeroMapper.dropTemplateZeroContentFileTable(stringJson);
+	}
 
 }

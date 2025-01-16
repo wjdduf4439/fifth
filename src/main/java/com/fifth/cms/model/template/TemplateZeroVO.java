@@ -15,7 +15,6 @@ public class TemplateZeroVO {
     private int viewNum;
     private int like;
     private int dislike;
-    private String likeOptionPath;
     private Date frstRegistPnttm;
     private String frstRegistNm;
     private Date lastUpdtPnttm;
@@ -29,7 +28,7 @@ public class TemplateZeroVO {
 		this.notice_chk = "N";
 	}
 
-	public TemplateZeroVO(Integer uid, String code, String codeHead, String del_chk, String notice_chk, String title, String writerNick, int viewNum, int like, int dislike, String likeOptionPath, Date frstRegistPnttm, String frstRegistNm, Date lastUpdtPnttm, String lastUpdtNm, TemplateZeroContentVO contentVO) {
+	public TemplateZeroVO(Integer uid, String code, String codeHead, String del_chk, String notice_chk, String title, String writerNick, int viewNum, int like, int dislike, Date frstRegistPnttm, String frstRegistNm, Date lastUpdtPnttm, String lastUpdtNm, TemplateZeroContentVO contentVO) {
 		this.uid = uid;
 		this.code = code;
 		this.codeHead = codeHead;
@@ -40,7 +39,6 @@ public class TemplateZeroVO {
 		this.viewNum = viewNum;
 		this.like = like;
 		this.dislike = dislike;
-		this.likeOptionPath = likeOptionPath;
 		this.frstRegistPnttm = frstRegistPnttm;
 		this.frstRegistNm = frstRegistNm;
 		this.lastUpdtPnttm = lastUpdtPnttm;
@@ -48,7 +46,7 @@ public class TemplateZeroVO {
 		this.contentVO = contentVO;
 	}
 
-	public TemplateZeroVO(Integer uid, String code, String codeHead, String del_chk, String notice_chk, String title, String writerNick, int viewNum, int like, int dislike, String likeOptionPath, Date frstRegistPnttm, String frstRegistNm, Date lastUpdtPnttm, String lastUpdtNm, TemplateZeroContentVO contentVO, List<TemplateZeroFileVO> fileVO) {
+	public TemplateZeroVO(Integer uid, String code, String codeHead, String del_chk, String notice_chk, String title, String writerNick, int viewNum, int like, int dislike, Date frstRegistPnttm, String frstRegistNm, Date lastUpdtPnttm, String lastUpdtNm, TemplateZeroContentVO contentVO, List<TemplateZeroFileVO> fileVO) {
 		this.uid = uid;
 		this.code = code;
 		this.codeHead = codeHead;
@@ -59,7 +57,6 @@ public class TemplateZeroVO {
 		this.viewNum = viewNum;
 		this.like = like;
 		this.dislike = dislike;
-		this.likeOptionPath = likeOptionPath;
 		this.frstRegistPnttm = frstRegistPnttm;
 		this.frstRegistNm = frstRegistNm;
 		this.lastUpdtPnttm = lastUpdtPnttm;
@@ -98,9 +95,6 @@ public class TemplateZeroVO {
     public int getDislike() { return dislike; }
     public void setDislike(int dislike) { this.dislike = dislike; }
 
-    public String getLikeOptionPath() { return likeOptionPath; }
-    public void setLikeOptionPath(String likeOptionPath) { this.likeOptionPath = likeOptionPath; }
-
     public Date getFrstRegistPnttm() { return frstRegistPnttm; }
     public void setFrstRegistPnttm(Date frstRegistPnttm) { this.frstRegistPnttm = frstRegistPnttm; }
 
@@ -131,7 +125,6 @@ public class TemplateZeroVO {
 				", viewNum=" + viewNum +
 				", like=" + like +
 				", dislike=" + dislike +
-				", likeOptionPath='" + likeOptionPath + '\'' +
 				", frstRegistPnttm=" + frstRegistPnttm +
 				", frstRegistNm='" + frstRegistNm + '\'' +
 				", lastUpdtPnttm=" + lastUpdtPnttm +

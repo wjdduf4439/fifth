@@ -8,7 +8,7 @@ public class RequestProcess {
 	//private final String[] filterValues = { "`", "$", "%", "^", "*", "@", "+", "|", ";", "<", ">", "\\" };
 	
 	private final String[] filterXSSValues = { "document", "window", "location", "history", "navigator", "cookie",
-			"localStorage", "sessionStorage", "innerHTML", "outerHTML", "src", "href",
+			"localStorage", "sessionStorage", "innerHTML", "outerHTML", "href",
 			"onload", "onerror", "onmouseover", "onfocus", "onclick", "onkeydown",
 			"onkeyup", "onkeypress", "eval", "setTimeout", "setInterval", "alert",
 			"confirm\\(", "prompt", "function", "constructor", "object", "Array", 

@@ -1,6 +1,7 @@
 package com.fifth.cms.service.template.TZERO;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,11 @@ public class TZEROFileService {
 		// TODO Auto-generated method stub
 		return tzeroFileMapper.getFile(stringJson);
 	}
+
+	public List<TemplateZeroFileVO> getContextImageFileList(HashMap<String, String> stringJson) throws Exception {
+		// TODO Auto-generated method stub
+		return tzeroFileMapper.getContextImageFileList(stringJson);
+	}
 	
 	public Integer getUploadedFileCount( HashMap<String, String> stringJson ) throws Exception {
 		// TODO Auto-generated method stub
@@ -45,9 +51,25 @@ public class TZEROFileService {
 		// TODO Auto-generated method stub
 		return tzeroFileMapper.insertFileRecord( stringJson );
 	}
+
+	public Integer insertContextImageFile(HashMap<String, String> stringJson) throws Exception {
+		// TODO Auto-generated method stub
+		return tzeroFileMapper.insertContextImageFile(stringJson);
+	}
 	
 	public Integer deleteFileRecord( HashMap<String, String> stringJson ) throws Exception {
 		// TODO Auto-generated method stub
 		return tzeroFileMapper.deleteFileRecord( stringJson );
 	}
+
+	public Integer deleteContextImageFile(HashMap<String, String> stringJson) throws Exception {
+		// TODO Auto-generated method stub
+		return tzeroFileMapper.deleteContextImageFile(stringJson);
+	}
+
+	public Integer deletePostedContextImageFile(HashMap<String, String> stringJson) throws Exception {
+		// TODO Auto-generated method stub
+		return tzeroFileMapper.deletePostedContextImageFile(stringJson);
+	}
+
 }

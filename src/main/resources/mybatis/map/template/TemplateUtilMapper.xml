@@ -3,11 +3,6 @@
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fifth.cms.mapper.template.TemplateUtilMapper">
 
-	<update id="updateLikeOptionPath">
-		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
-		UPDATE `${tableCode}_post` SET likeOptionPath = #{likeOptionPath} WHERE uid = #{uid};
-	</update>
-
 	<update id="plusLike">
 		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
 		UPDATE `${tableCode}_post` SET `like` = `like` + 1 WHERE uid = #{uid};

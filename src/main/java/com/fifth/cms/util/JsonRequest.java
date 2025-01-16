@@ -32,14 +32,15 @@ public class JsonRequest extends HttpServletRequestWrapper{
 	 */
 	//private final String[] filterValues = { "`", "$", "%", "^", "*", "@", "+", "|", ";", "<", ">", "\\" };
 	
-	private final String[] filterXSSValues = { "document", "window", "location", "history", "navigator", "cookie",
-			"localStorage", "sessionStorage", "innerHTML", "outerHTML", "src", "href",
-			"onload", "onerror", "onmouseover", "onfocus", "onclick", "onkeydown",
-			"onkeyup", "onkeypress", "eval", "setTimeout", "setInterval", "alert",
-			"confirm\\(", "prompt", "function", "constructor", "object", "Array", 
-			"String", "RegExp", "execCommand", "createElement", "appendChild",
-			"replaceChild", "insertBefore", ".write", "writeln", "script", "select", "from", "where"
-	};
+	// private final String[] filterXSSValues = { "document", "window", "location", "history", "navigator", "cookie",
+	// 		"localStorage", "sessionStorage", "innerHTML", "outerHTML", "href",
+	// 		"onload", "onerror", "onmouseover", "onfocus", "onclick", "onkeydown",
+	// 		"onkeyup", "onkeypress", "eval", "setTimeout", "setInterval", "alert",
+	// 		"confirm\\(", "prompt", "function", "constructor", "object", "Array", 
+	// 		"String", "RegExp", "execCommand", "createElement", "appendChild",
+	// 		"replaceChild", "insertBefore", ".write", "writeln", "script", "select", "from", "where"
+	// };
+
 
 	@SuppressWarnings("unchecked")
 	public JsonRequest(HttpServletRequest request) throws JSONException, Exception {

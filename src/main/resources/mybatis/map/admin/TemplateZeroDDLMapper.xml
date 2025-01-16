@@ -20,14 +20,14 @@
 			`viewNum` int(11) NOT NULL DEFAULT '0' COMMENT '조회수',
 			`like` int(11) DEFAULT '0' COMMENT '좋아요수',
 			`dislike` int(11) DEFAULT '0' COMMENT '싫어요수',
-			`likeOptionPath` varchar(250) DEFAULT NULL COMMENT '좋아요 옵션 경로',
+			<!-- `likeOptionPath` varchar(250) DEFAULT NULL COMMENT '좋아요 옵션 경로', -->
 			`frstRegistPnttm` datetime DEFAULT NULL COMMENT '최초 게시물 작성시간',
 			`frstRegistNm` varchar(50) DEFAULT NULL COMMENT '최초 게시물 작성자',
 			`lastUpdtPnttm` datetime DEFAULT NULL COMMENT '최종 게시물 수정시간',
 			`lastUpdtNm` varchar(50) DEFAULT NULL COMMENT '최종 게시물 수정자',
 			PRIMARY KEY (`uid`),
 			INDEX idx_title (`title`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='사이트관리 >> 게시판관리 >> ${ name } >> 생성된 테이블\\r\\n';
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='사이트관리 >> 게시판관리 >> ${ name } >> 생성된 테이블\\r\\n 좋아요 싫어요 기능은 uid파일이름을 참고할것';
 		
 	</update>
 
@@ -76,11 +76,25 @@
 			`context` text COMMENT '댓글 내용',
 			`like` int(11) NOT NULL DEFAULT '0' COMMENT '좋아요수',
 			`dislike` int(11) NOT NULL DEFAULT '0' COMMENT '싫어요수',
-			`likeOptionPath` varchar(250) DEFAULT NULL COMMENT '좋아요 옵션 경로',
 			`frstRegistPnttm` datetime DEFAULT NULL COMMENT '최초 덧글 작성시간',
 			`lastUpdtPnttm` datetime DEFAULT NULL COMMENT '최종 덧글 수정시간',
 			PRIMARY KEY (`uid`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='${ name } 댓글 테이블';
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='사이트관리 >> 게시판관리 >> ${ name } >> 댓글 테이블\\r\\n 좋아요 싫어요 기능은 uid파일이름을 참고할것';
+	</update>
+
+	<update id="createTemplateZeroContentFileTable" parameterType="java.util.HashMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code)"/>
+
+		CREATE TABLE ${tableCode}_contextfile (
+			`uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '고유번호',
+			`code` varchar(20) NOT NULL COMMENT '코드명은 ${tableCode}',
+			`pid` int(11) DEFAULT NULL COMMENT '게시물 고유번호 - 해당 코드의 post 테이블의 uid',
+			`fpath` varchar(200) DEFAULT NULL COMMENT '내용이미지 파일 경로',
+			`fname` varchar(200) DEFAULT NULL COMMENT '내용이미지 업로드할시 실제 파일명',
+			PRIMARY KEY (`uid`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='사이트관리 >> 게시판관리 >> ${ name } >> 글내용 첨부파일 테이블';
+		
 	</update>
 
 	<update id="dropTemplateZeroPostTable" parameterType="java.util.HashMap">
@@ -97,6 +111,10 @@
 
 	<update id="dropTemplateZeroReplyTable" parameterType="java.util.HashMap">
 		DROP TABLE IF EXISTS ${ @com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code) }_reply
+	</update>
+
+	<update id="dropTemplateZeroContentFileTable" parameterType="java.util.HashMap">
+		DROP TABLE IF EXISTS ${ @com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(code) }_contextfile
 	</update>
 
 

@@ -14,7 +14,6 @@
 		<result property="viewNum" column="viewNum"/>
 		<result property="like" column="like"/>
 		<result property="dislike" column="dislike"/>
-		<result property="likeOptionPath" column="likeOptionPath"/>
 		<result property="frstRegistPnttm" column="frstRegistPnttm"/>
 		<result property="frstRegistNm" column="frstRegistNm"/>
 		<result property="lastUpdtPnttm" column="lastUpdtPnttm"/>
@@ -48,8 +47,24 @@
 
 		SELECT *, #{tableCode} as `codeHead`, #{requesturl} as `requesturl`
 		FROM `${tableCode}_post`
+		WHERE	1=1
+		<!-- 공지사항 게시물은 페이징에 포함하지 않기 -->
+		<if test="noticeShow == 'Y'">
+			AND		notice_chk = 'N'
+		</if>
 		ORDER BY frstRegistPnttm DESC, uid DESC
 		LIMIT #{startPoint}, #{limit};	
+	</select>
+
+	<select id="getNoticePostList" resultMap="templateZeroListMap">
+
+		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
+
+		SELECT *, #{tableCode} as `codeHead`, #{requesturl} as `requesturl`
+		FROM `${tableCode}_post`
+		WHERE	1=1
+		AND		notice_chk = 'Y'
+		ORDER BY frstRegistPnttm DESC, uid DESC
 	</select>
 
 	<select id="getPost" resultMap="templateZeroMap">
@@ -103,7 +118,12 @@
 
 		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
 
-		SELECT count(*) FROM `${tableCode}_post`;
+		SELECT count(*) FROM `${tableCode}_post` 
+		WHERE	1=1
+		<!-- 공지사항 게시물은 페이징에 포함하지 않기 -->
+		<if test="noticeShow == 'Y'">
+			AND		notice_chk = 'N'
+		</if>
 	</select>
 
 	<insert id="insertPost">	
@@ -152,8 +172,8 @@
 
 		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
 		UPDATE `${tableCode}_post` SET
+			notice_chk = #{notice_chk},
 			title = #{title},
-			likeOptionPath = #{likeOptionPath},
 			lastUpdtPnttm = current_timestamp(),
 			lastUpdtNm = #{lastUpdtNm}
 		WHERE uid = #{uid};
@@ -164,19 +184,14 @@
 		UPDATE `${tableCode}_context` SET context = #{processContext} WHERE pid = #{uid};
 	</update>
 
-	<update id="updateLikeOptionPath">
-		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
-		UPDATE `${tableCode}_post` SET likeOptionPath = #{likeOptionPath} WHERE uid = #{uid};
-	</update>
-
 	<update id="disablePost">
 		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
-		UPDATE `${tableCode}_post` SET del_chk = 'Y' WHERE uid = #{uid};
+		UPDATE `${tableCode}_post` SET del_chk = 'Y' WHERE uid = #{uid} and frstRegistNm = #{frstRegistNm};
 	</update>
 
 	<update id="restorePost">
 		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
-		UPDATE `${tableCode}_post` SET del_chk = 'N' WHERE uid = #{uid};
+		UPDATE `${tableCode}_post` SET del_chk = 'N' WHERE uid = #{uid} and frstRegistNm = #{frstRegistNm};
 	</update>
 
 	<update id="plusViewNum">
@@ -188,7 +203,7 @@
 
 		<bind name="tableCode" value="@com.fifth.cms.filter.MybatisXSSFilter@sanitizeDDL(codeHead)"/>
 
-		DELETE FROM `${tableCode}_post` WHERE uid = #{uid};
+		DELETE FROM `${tableCode}_post` WHERE uid = #{uid} and frstRegistNm = #{frstRegistNm};
 	</delete>
 
 	<delete id="deleteContent">

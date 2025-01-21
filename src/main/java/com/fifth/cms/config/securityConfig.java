@@ -74,7 +74,8 @@ public class securityConfig {
         http
             .csrf(csrf -> csrf.disable()) // CSRF 비활성화
             .cors(cors -> cors.configurationSource(corsFilter.corsConfigurationSource())) // CORS 설정 활성화
-
+			// 모든 경로에 대해 보안 요구
+            .requiresChannel(channel -> channel.anyRequest().requiresSecure() )
 			// 모든 경로에 security 검증을 적용할지 수행한다. 이 설정은 formLogin과 같은 메소드에만 적용되며, 필터와는 무관하다.
 			// authorizeRequests 경로 설정을 추가해도 addFilterBefore와 같은 필터 경로 검증을 수행하게 된다.
             .authorizeHttpRequests(authorizeRequests -> 

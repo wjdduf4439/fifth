@@ -7,9 +7,4 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SslConfig implements WebMvcConfigurer {
 	
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/", "https://www.ljycms.com:80");
-    }
-	
 }

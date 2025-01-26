@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-@RequestMapping("/template")
+@RequestMapping("/api/template")
 @Controller
 public class TemplateOptionController {
 

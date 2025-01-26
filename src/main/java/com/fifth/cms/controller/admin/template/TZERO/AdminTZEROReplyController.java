@@ -18,7 +18,7 @@ import com.fifth.cms.util.template.LikeOptionProcess;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 @Controller
-@RequestMapping("/admin/template/tzero/reply")
+@RequestMapping("/api/admin/template/tzero/reply")
 public class AdminTZEROReplyController {
 	
 	private final AccessInfo accessInfo = new AccessInfo();

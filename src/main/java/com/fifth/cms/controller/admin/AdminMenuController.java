@@ -18,7 +18,7 @@ import com.fifth.cms.util.admin.MenuUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@RequestMapping("/admin/menu")
+@RequestMapping("/api/admin/menu")
 @Controller
 public class AdminMenuController {
 

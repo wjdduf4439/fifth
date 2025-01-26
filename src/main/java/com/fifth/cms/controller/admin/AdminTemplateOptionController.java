@@ -18,7 +18,7 @@ import com.fifth.cms.service.admin.TemplateOptionService;
 import jakarta.servlet.http.HttpServletRequest;
 
 //codehead 등록시 필요한 옵션 컨트롤러
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 @Controller
 public class AdminTemplateOptionController {
 

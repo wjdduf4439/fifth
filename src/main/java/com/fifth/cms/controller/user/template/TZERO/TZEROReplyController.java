@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping("/user/template/tzero/reply")
+@RequestMapping("/api/user/template/tzero/reply")
 public class TZEROReplyController {
 	
 	private final TZEROReplyService tZEROreplyService;

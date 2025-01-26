@@ -14,7 +14,7 @@ import com.fifth.cms.util.access.AccessInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RequestMapping(value = "/common")
+@RequestMapping(value = "/api/common")
 @Controller
 public class AccessController {
 

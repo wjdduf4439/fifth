@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -31,7 +29,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping("/admin/template/tzero/post")
+@RequestMapping("/api/admin/template/tzero/post")
 public class AdminTZEROPostController {
 
 	private final AccessInfo accessInfo = new AccessInfo();

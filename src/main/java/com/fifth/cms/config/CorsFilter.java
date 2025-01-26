@@ -15,6 +15,7 @@ public class CorsFilter {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
 		config.addAllowedOrigin("http://localhost:3000");
+		config.addAllowedOrigin("https://www.ljycms.com:3000");
 		config.addAllowedHeader("Content-Type");
 		config.addAllowedHeader("Authorization");
 		config.addAllowedMethod("GET");

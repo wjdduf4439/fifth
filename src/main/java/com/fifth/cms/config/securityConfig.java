@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
@@ -68,48 +69,56 @@ public class securityConfig {
     }
  	*/
 
-    // 인증 관리자를 주입하여 인증 관리자 빈을 생성
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable()) // CSRF 비활성화
-            .cors(cors -> cors.configurationSource(corsFilter.corsConfigurationSource())) // CORS 설정 활성화
-			// 모든 경로에 대해 보안 요구
-            .requiresChannel(channel -> channel.anyRequest().requiresSecure() )
+	 private void configureCommonSecurity(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+		http
+			.csrf(csrf -> csrf.disable()) // CSRF 비활성화
+			.cors(cors -> cors.configurationSource(corsFilter.corsConfigurationSource())) // CORS 설정 활성화
 			// 모든 경로에 security 검증을 적용할지 수행한다. 이 설정은 formLogin과 같은 메소드에만 적용되며, 필터와는 무관하다.
 			// authorizeRequests 경로 설정을 추가해도 addFilterBefore와 같은 필터 경로 검증을 수행하게 된다.
-            .authorizeHttpRequests(authorizeRequests -> 
-                authorizeRequests
-                    //.anyRequest().permitAll() // 나머지 모든 경로에 대해 접근 허용
-					.requestMatchers("/auth.go").hasAuthority("admin") // /auth.go 경로에 대해 admin 권한 필요
-					.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
-                    .anyRequest().authenticated()
-            )
+			.authorizeHttpRequests(authorizeRequests -> 
+				authorizeRequests
+					.requestMatchers("/api/auth.go").hasAuthority("admin") // /auth.go 경로에 대해 admin 권한 필요
+					.requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll()
+					.anyRequest().authenticated()
+			)
 			//axios 요청 시 로그인 인증 처리
-            .addFilterBefore(new JsonAuthentication(authenticationManager, bCryptPasswordEncoder(), accessService), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new JsonAuthentication(authenticationManager, bCryptPasswordEncoder(), accessService), UsernamePasswordAuthenticationFilter.class)
 			//인증 필요한 사이트 접속시, jwt 요청 시 인증 처리
-            .addFilterBefore(new JwtAuthenticationFilter(accessService), UsernamePasswordAuthenticationFilter.class)
-            .formLogin(form -> {
-                //form.loginPage("/login.go");
-                form.usernameParameter("id");
-                form.passwordParameter("pw");
-                form.loginProcessingUrl("/accLogin.go");
-                form.successHandler(loginSuccessHandler); // 로그인 성공 핸들러 설정
-                form.failureHandler(loginFailedHandler);
+			.addFilterBefore(new JwtAuthenticationFilter(accessService), UsernamePasswordAuthenticationFilter.class)
+			.formLogin(form -> {
+				form.usernameParameter("id");
+				form.passwordParameter("pw");
+				form.loginProcessingUrl("/api/accLogin.go");
+				form.successHandler(loginSuccessHandler); // 로그인 성공 핸들러 설정
+				form.failureHandler(loginFailedHandler);
                 // form.defaultSuccessUrl("/home", true); // 로그인 성공 시 리다이렉트할 URL 설정 (제거)
-            })
-			// 인증 실패 시 처리
-            .exceptionHandling(exception -> exception
-                .accessDeniedHandler(loginDeniedHandler)
-            )
-            .userDetailsService(loginHomeService)
+			})
+			.exceptionHandling(exception -> exception
+				.accessDeniedHandler(loginDeniedHandler)
+			)
+			.userDetailsService(loginHomeService)
 			//Axios 인증 요청에서도 customAuthenticationProvider가 호출되는 이유는 Spring Security의 인증 흐름 때문입니다.
 			//Axios 인증 요청은 기본적으로 폼 로그인 프로세스를 거치지 않기 때문에, 
 			//customAuthenticationProvider가 호출되어 인증 처리를 수행합니다.
-            .authenticationProvider(customAuthenticationProvider);
+			.authenticationProvider(customAuthenticationProvider);
+	}
 
-        return http.build();
-    }
+    // 인증 관리자를 주입하여 인증 관리자 빈을 생성
+	@Bean
+	@Profile("dev")
+	public SecurityFilterChain devSecurityFilterChain(HttpSecurity http, @Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager) throws Exception {
+		configureCommonSecurity(http, authenticationManager);
+		// dev 환경에 특화된 설정 추가 가능
+		return http.build();
+	}
+
+	@Bean
+	@Profile("aws")
+	public SecurityFilterChain awsSecurityFilterChain(HttpSecurity http, @Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager) throws Exception {
+		configureCommonSecurity(http, authenticationManager);
+		http.requiresChannel(channel -> channel.anyRequest().requiresSecure()); // AWS 환경에 특화된 설정
+		return http.build();
+	}
 
     // 인증 관리자를 주입하여 인증 관리자 빈을 생성
     @Primary

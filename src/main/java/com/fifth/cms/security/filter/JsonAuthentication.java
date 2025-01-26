@@ -47,7 +47,7 @@ public class JsonAuthentication extends AbstractAuthenticationProcessingFilter {
 	 *                              명시적으로 지정할 수 있습니다.
 	 */
 	public JsonAuthentication(@Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager, BCryptPasswordEncoder passwordEncoder, AccessService accessService) {
-		super(new AntPathRequestMatcher("/accLogin.go", "POST"));
+		super(new AntPathRequestMatcher("/api/accLogin.go", "POST"));
 		setAuthenticationManager(authenticationManager);
 		this.passwordEncoder = passwordEncoder;
 		this.accessService = accessService;

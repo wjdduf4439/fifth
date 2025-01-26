@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping("/user/template/tzero/post")
+@RequestMapping("/api/user/template/tzero/post")
 public class TZEROPostController {
 
 	private final Environment environment;

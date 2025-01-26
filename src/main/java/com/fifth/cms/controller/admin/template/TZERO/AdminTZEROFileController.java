@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 @Controller
-@RequestMapping("/admin/template/tzero/file")
+@RequestMapping("/api/admin/template/tzero/file")
 public class AdminTZEROFileController {
 
 	private final Environment environment;

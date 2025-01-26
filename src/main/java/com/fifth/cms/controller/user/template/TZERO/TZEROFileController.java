@@ -21,7 +21,7 @@ import com.fifth.cms.util.template.FileProcess;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping("/user/template/tzero/file")
+@RequestMapping("/api/user/template/tzero/file")
 public class TZEROFileController {
 	
 	private final Environment environment;

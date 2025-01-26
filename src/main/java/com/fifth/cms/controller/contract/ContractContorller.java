@@ -16,7 +16,7 @@ import com.fifth.cms.util.CodeProcess;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RequestMapping(value = "/contract")
+@RequestMapping("/api/contract")
 @Controller
 public class ContractContorller {
 	

@@ -16,7 +16,7 @@ import com.fifth.cms.service.contract.ContractService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RequestMapping(value = "/admin/contract")
+@RequestMapping("/api/admin/contract")
 @Controller
 public class AdminContractController {
 

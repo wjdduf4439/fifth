@@ -87,10 +87,10 @@ public class servletConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new AccessInterCeptor(accessService))
-				.addPathPatterns("/admin/**")
+				.addPathPatterns("/api/admin/**")
 				.excludePathPatterns(EXCLUDE_PATHS);
 		registry.addInterceptor(new AdminInterCeptor(accessService))
-				.addPathPatterns("/admin/**")
+				.addPathPatterns("/api/admin/**")
 				.excludePathPatterns(EXCLUDE_PATHS);
 	}
 

@@ -32,6 +32,10 @@ public class AccessService {
 		return accessMapper.selectAccessOneforCode(code);
 	}
 
+	public Integer insertAccount(HashMap<String, String> stringJson) {
+		return accessMapper.insertAccount(stringJson);
+	}
+
 	public void updateRefreshToken(AccessVO accessVO) {
 		accessMapper.updateRefreshToken(accessVO);
 	}

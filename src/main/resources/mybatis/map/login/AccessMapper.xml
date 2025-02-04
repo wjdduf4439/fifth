@@ -49,7 +49,7 @@
 	</select>
 
 	<!-- 사용자 정보 입력 -->
-	<insert id="accRegist" >
+	<insert id="insertAccount" >
 		 	
 			INSERT INTO FIFTH_ACCESS (
 				code

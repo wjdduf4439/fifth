@@ -44,4 +44,22 @@ public class AccessController {
 		return resultMap;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/accRegist.go", method = { RequestMethod.POST }, produces = "application/json")
+	public HashMap<String, Object> accRegist(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, String> stringJson) {
+
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("result", false);
+
+		Integer result = accessService.insertAccount(stringJson);
+
+		if (result > 0) {
+			resultMap.put("result", true);
+			resultMap.put("message", "회원가입 되었습니다.");
+		}
+
+		return resultMap;
+	}
+
+
 }

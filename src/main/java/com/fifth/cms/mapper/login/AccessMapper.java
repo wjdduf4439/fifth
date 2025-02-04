@@ -10,10 +10,6 @@ import java.util.HashMap;
 @Mapper
 public interface AccessMapper {
 
-	public Integer accRegist(AccessVO accessVO);
-
-	public Integer accRegist(HashMap<String, String> stringJson);
-
 	public Integer accIdCount(AccessVO accessVO);
 
 	public Integer accIdCount(HashMap<String, String> stringJson);
@@ -29,6 +25,10 @@ public interface AccessMapper {
 	public Integer checkAccess(HashMap<String, String> accessInfoMap);
 
 	public AccessVO checkAdminOne(HashMap<String, String> accessInfoMap);
+
+	public Integer insertAccount(AccessVO accessVO);
+
+	public Integer insertAccount(HashMap<String, String> stringJson);
 
 	public Integer updateRefreshToken(AccessVO accessVO);
 

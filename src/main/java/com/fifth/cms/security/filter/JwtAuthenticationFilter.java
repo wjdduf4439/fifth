@@ -126,10 +126,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-		if(userAgent == null || !userAgent.equals(request.getHeader("User-Agent"))) {
-			response = unauthenticatedAccessToken(response, accessInfoMap, "접속을 인증하는 도중 문제가 발생했습니다 - 4440");
-			return;
-		}
+		// 다른 기기간 로그인 관련 옵션인데, 모바일/pc 도중 한쪽에 로그인을 하고 다른쪽에 웹으로 접속하면 인증절차가 안되는 문제점이 있음
+		// 이 부분 관련해서는 주목해보고 다른 방식을 생각해봐야함
+		// if(userAgent == null || !userAgent.equals(request.getHeader("User-Agent"))) {
+		// 	response = unauthenticatedAccessToken(response, accessInfoMap, "접속을 인증하는 도중 문제가 발생했습니다 - 4440");
+		// 	return;
+		// }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, null, authorities);

@@ -72,8 +72,14 @@ public class AdminTZEROPostController {
 				saveTempContentImageFileString += fileVO.getFname() + ",";
 			}
 
+			if(saveTempContentImageFileString.length() > 0) {
+				saveTempContentImageFileString = saveTempContentImageFileString.substring(0, saveTempContentImageFileString.length() - 1);
+			}else{
+				saveTempContentImageFileString = "";
+			}
+
 			resultMap.put("resultList", codeHeadVO);
-			resultMap.put("saveTempContentImageFileString", saveTempContentImageFileString.substring(0, saveTempContentImageFileString.length() - 1));
+			resultMap.put("saveTempContentImageFileString", saveTempContentImageFileString);
 
 		}
 

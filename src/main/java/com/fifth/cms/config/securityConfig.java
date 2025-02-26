@@ -85,14 +85,16 @@ public class securityConfig {
 			.addFilterBefore(new JsonAuthentication(authenticationManager, bCryptPasswordEncoder(), accessService), UsernamePasswordAuthenticationFilter.class)
 			//인증 필요한 사이트 접속시, jwt 요청 시 인증 처리
 			.addFilterBefore(new JwtAuthenticationFilter(accessService), UsernamePasswordAuthenticationFilter.class)
-			.formLogin(form -> {
-				form.usernameParameter("id");
-				form.passwordParameter("pw");
-				form.loginProcessingUrl("/api/accLogin.go");
-				form.successHandler(loginSuccessHandler); // 로그인 성공 핸들러 설정
-				form.failureHandler(loginFailedHandler);
-                // form.defaultSuccessUrl("/home", true); // 로그인 성공 시 리다이렉트할 URL 설정 (제거)
-			})
+
+			// .formLogin(form -> {
+			// 	form.usernameParameter("id");
+			// 	form.passwordParameter("pw");
+			// 	form.loginProcessingUrl("/api/accLogin.go");
+			// 	form.successHandler(loginSuccessHandler); // 로그인 성공 핸들러 설정
+			// 	form.failureHandler(loginFailedHandler);
+            //     // form.defaultSuccessUrl("/home", true); // 로그인 성공 시 리다이렉트할 URL 설정 (제거)
+			// })
+
 			.exceptionHandling(exception -> exception
 				.accessDeniedHandler(loginDeniedHandler)
 			)

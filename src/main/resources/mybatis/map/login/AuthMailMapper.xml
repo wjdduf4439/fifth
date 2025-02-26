@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fifth.cms.mapper.login.AuthMailMapper">
+
+    <resultMap id="AuthMailMap" type="com.fifth.cms.model.login.AuthMailVO">
+        <id property="uid" column="uid"/>
+        <result property="authkey" column="authkey"/>
+        <result property="email" column="email"/>
+        <result property="signdate" column="signdate"/>
+    </resultMap>
+
+    <select id="getAuthMailInfo" resultMap="AuthMailMap">
+        SELECT * 
+        FROM AUTHMAILINFO 
+        WHERE   email = #{email}
+        <!-- 3분 이내로 인증 -->
+        AND     signdate > DATE_SUB(NOW(), INTERVAL 3 MINUTE)
+        ORDER BY uid desc
+        LIMIT 1
+    </select>
+
+    <insert id="insertAuthMail">
+        INSERT INTO AUTHMAILINFO (uid, authkey, email, signdate)
+        VALUES (
+            #{uid}, 
+            #{authkey}, 
+            #{email}, 
+            current_timestamp()
+        )
+    </insert>
+
+    <delete id="deleteAuthMail">
+        DELETE FROM AUTHMAILINFO WHERE email = #{email}
+    </delete>
+
+</mapper>

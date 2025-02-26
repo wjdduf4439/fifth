@@ -24,6 +24,14 @@ public class AccessService {
 		return accessMapper.checkAdminOne(accessInfoMap);
 	}
 
+	public AccessVO checkNickName(HashMap<String, String> stringJson) {
+		return accessMapper.checkNickName(stringJson);
+	}
+
+	public AccessVO checkEmail(HashMap<String, String> stringJson) {
+		return accessMapper.checkEmail(stringJson);
+	}
+
 	public AccessVO selectAccessOne(AccessVO accessVO) {
 		return accessMapper.selectAccessOne(accessVO);
 	}

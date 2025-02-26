@@ -4,7 +4,7 @@
 <mapper namespace="com.fifth.cms.mapper.login.AccessMapper">
 
 	<resultMap id="AccessMap" type="com.fifth.cms.model.login.AccessVO">
-        <id property="code" column="code"/>
+        <id property="uid" column="uid"/>
 		<result property="id" column="id"/>
 		<result property="pw" column="pw"/>
 		<result property="nick" column="nick"/>
@@ -48,21 +48,31 @@
 		select * from FIFTH_ACCESS WHERE code = #{ accessCode } and refreshToken = #{ refreshToken } and authority = 'admin'
 	</select>
 
+	<!-- 사용자 닉네임 중복 체크 -->
+	<select id="checkNickName" parameterType="HashMap" resultMap="AccessMap">
+		select * from FIFTH_ACCESS WHERE nick = #{ nick }
+	</select>
+
+	<!-- 사용자 이메일 중복 체크 -->
+	<select id="checkEmail" parameterType="HashMap" resultMap="AccessMap">
+		select * from FIFTH_ACCESS WHERE email = #{ email }
+	</select>
+
 	<!-- 사용자 정보 입력 -->
 	<insert id="insertAccount" >
 		 	
 			INSERT INTO FIFTH_ACCESS (
-				code
-				,id
+				id
 				,pw
 				,nick
+				,email
 				,role
 				,authority
 			) VALUES (
-				#{ code }
-				,#{ id }
+				#{ id }
 				,#{ pw }
 				,#{ nick }
+				,#{ email }
 				,#{ role }
 				,#{ authority }
 			)
@@ -77,14 +87,14 @@
 	<update id="updateRefreshToken" >
 			UPDATE FIFTH_ACCESS SET
 				refreshToken = #{ refreshToken }
-			WHERE code = #{ code }
+			WHERE uid = #{ uid }
 	</update>
 
 	<!-- 사용자 접속 종료시 refreshToken 초기화 -->
 	<update id="updateBlankRefreshToken" >	
 			UPDATE FIFTH_ACCESS SET
 				refreshToken = ''
-			WHERE code = #{ accessCode }
+			WHERE uid = #{ accessCode }
 			and refreshToken = #{ refreshToken }
 	</update>
 

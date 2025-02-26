@@ -7,22 +7,22 @@ import org.springframework.security.core.GrantedAuthority;
 
 public class FifthAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
-	private String accessCode;
+	private Integer uid;
 	private String nick;
 
 	public FifthAuthenticationToken(Object principal, Object credentials,
-			Collection<? extends GrantedAuthority> authorities, String nickname, String accessCode) {
+			Collection<? extends GrantedAuthority> authorities, String nickname, Integer uid) {
 		super(principal, credentials, authorities);
 		this.nick = nickname;
-		this.accessCode = accessCode;
+		this.uid = uid;
 	}
 
 	public String getNick() {
 		return nick;
 	}
 
-	public String getAccessCode() {
-		return accessCode;
+	public Integer getUid() {
+		return uid;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class FifthAuthenticationToken extends UsernamePasswordAuthenticationToke
 		sb.append("Details=").append(getDetails()).append(", ");
 		sb.append("Granted Authorities=").append(this.getAuthorities()).append(", ");
 		sb.append("nickname=").append(nick).append(", ");
-		sb.append("accessCode=").append(accessCode);
+		sb.append("uid=").append(uid);
 		sb.append("]");
 
 		return sb.toString();

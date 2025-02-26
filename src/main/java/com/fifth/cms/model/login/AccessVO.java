@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class AccessVO implements UserDetails {
 
-	private String code;
+	private Integer uid;
 	private String id;
 	private String pw;
 	private String nick;
@@ -19,16 +19,18 @@ public class AccessVO implements UserDetails {
 		2. Authority 기반 접근 제어:
 		더 세밀한 접근 제어를 위해 사용됩니다. 특정 작업이나 리소스에 대한 접근을 제한할 때 사용됩니다.
 	*/
-
+	private String email;
 	private String role;
 	private String authority;
 	private String refreshToken;
+	private String approve;
 	
-	public String getCode() {
-		return code;
+	
+	public Integer getUid() {
+		return uid;
 	}
-	public void setCode(String code) {
-		this.code = code;
+	public void setUid(Integer uid) {
+		this.uid = uid;
 	}
 	public String getId() {
 		return id;
@@ -48,6 +50,12 @@ public class AccessVO implements UserDetails {
 	public void setNick(String nick) {
 		this.nick = nick;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public String getRole() {
 		return role;
 	}
@@ -65,6 +73,12 @@ public class AccessVO implements UserDetails {
 	}
 	public void setRefreshToken(String refreshToken) {
 		this.refreshToken = refreshToken;
+	}
+	public String getApprove() {
+		return approve;
+	}
+	public void setApprove(String approve) {
+		this.approve = approve;
 	}
 	/*
 
@@ -115,8 +129,15 @@ public class AccessVO implements UserDetails {
 	}
 	@Override
 	public String toString() {
-		return "code= " + code + ",\nid= " + id + ",\npw= " + pw + ",\nrole= " + role + ",\nauthority= " + authority
-				+ "]";
+		return "AccessVO{" +
+				"id='" + id + '\'' +
+				", pw='" + pw + '\'' +
+				", nick='" + nick + '\'' +
+				", role='" + role + '\'' +
+				", authority='" + authority + '\'' +
+				", refreshToken='" + refreshToken + '\'' +
+				", approve='" + approve + '\'' +
+				'}';
 	}
 	
 }

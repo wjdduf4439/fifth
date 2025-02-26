@@ -90,9 +90,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		}
 
 		// username, password 일치 시 토큰을 생성한다.
-		System.out.println("[return] : " + new FifthAuthenticationToken(username, password, userDetails.getAuthorities(), userDetails.getNick(), userDetails.getCode()).toString());
+		System.out.println("[return] : " + new FifthAuthenticationToken(username, password, userDetails.getAuthorities(), userDetails.getNick(), userDetails.getUid()).toString());
 		// return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
-		return new FifthAuthenticationToken(username, password, userDetails.getAuthorities(), userDetails.getNick(), userDetails.getCode());
+		return new FifthAuthenticationToken(username, password, userDetails.getAuthorities(), userDetails.getNick(), userDetails.getUid());
 	}
 
 	@Override

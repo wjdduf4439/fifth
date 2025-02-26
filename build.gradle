@@ -45,6 +45,9 @@ dependencies {
 	//SHA384 암호화 라이브러리
 	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
 
+	//이메일 인증 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail:3.3.0'
+
 }
 
 tasks.named('test') {

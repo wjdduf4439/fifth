@@ -26,6 +26,10 @@ public interface AccessMapper {
 
 	public AccessVO checkAdminOne(HashMap<String, String> accessInfoMap);
 
+	public AccessVO checkNickName(HashMap<String, String> stringJson);
+
+	public AccessVO checkEmail(HashMap<String, String> stringJson);
+
 	public Integer insertAccount(AccessVO accessVO);
 
 	public Integer insertAccount(HashMap<String, String> stringJson);

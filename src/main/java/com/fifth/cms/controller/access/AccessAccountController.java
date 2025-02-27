@@ -1,6 +1,7 @@
 package com.fifth.cms.controller.access;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,26 +10,46 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fifth.cms.model.login.AccessVO;
+import com.fifth.cms.service.login.access.AccessService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping(value = "/api/accessAccount")
+@RequestMapping(value = "/api/admin/accessAccount")
 public class AccessAccountController {
 
+    private final AccessService accessService;
+
+    public AccessAccountController(AccessService accessService) {
+        this.accessService = accessService;
+    }
+
     @ResponseBody
-    @RequestMapping(value = "/{processMark:list|one|count}", method = {
-            RequestMethod.POST }, produces = "application/json")
-    public HashMap<String, Object> list(HttpServletRequest req, HttpServletResponse res,
-            @RequestParam HashMap<String, String> stringJson, @PathVariable("processMark") String processMark) {
+    @RequestMapping(value = "/{processMark:list|one|count|approveList}", method = { RequestMethod.POST }, produces = "application/json")
+    public HashMap<String, Object> list(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, String> stringJson, @PathVariable("processMark") String processMark) {
 
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("result", false);
 
+        //승인된 사용자 목록 조회
         if ("list".equals(processMark)) {
-            // List<AccessAccountVO> accessAccountList =
-            // accessAccountService.selectAccessAccountList(stringJson);
-            // resultMap.put("resultList", accessAccountList);
+            stringJson.put("approve", "Y");
+            List<AccessVO> accessAccountList = accessService.selectAccessList(stringJson);
+            resultMap.put("resultList", accessAccountList);
+
+        //승인된 사용자 수 조회
+        }else if ("one".equals(processMark)) {
+
+            AccessVO accessVO = accessService.selectAccessOne(stringJson);
+            resultMap.put("resultList", accessVO);
+
+        //승인 대기 목록 조회
+        }else if ("approveList".equals(processMark)) {
+            stringJson.put("approve", "N");
+            List<AccessVO> accessAccountList = accessService.selectAccessList(stringJson);
+            resultMap.put("resultList", accessAccountList);
         }
 
         resultMap.put("result", true);

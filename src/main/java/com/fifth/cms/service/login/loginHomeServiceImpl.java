@@ -41,7 +41,7 @@ public class loginHomeServiceImpl implements UserDetailsService {
 	public AccessVO accLoginHome( AccessVO accessVO ) throws Exception {
 		
 		System.out.println("access Login Service");
-		AccessVO registedLoginHomeVO = accessMapper.selectAccessOne(accessVO);
+		AccessVO registedLoginHomeVO = accessMapper.selectAccessOneApproved(accessVO);
 		
 		return registedLoginHomeVO;
 	}
@@ -67,7 +67,7 @@ public class loginHomeServiceImpl implements UserDetailsService {
 		
 		AccessVO loginHomeVO = new AccessVO();
 		try {
-			loginHomeVO = accessMapper.selectAccessOne(accessVO);
+			loginHomeVO = accessMapper.selectAccessOneApproved(accessVO);
 
 			if(loginHomeVO == null) {
 				return accessVO;

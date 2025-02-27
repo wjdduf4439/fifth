@@ -1,6 +1,7 @@
 package com.fifth.cms.service.login.access;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,27 @@ public class AccessService {
 		this.accessMapper = accessMapper;
 	}
 
+	public List<AccessVO> selectAccessList(HashMap<String, String> stringJson) {
+		return accessMapper.selectAccessList(stringJson);
+	}
+
 	public Integer checkAccess(HashMap<String, String> accessInfoMap) {
 		return accessMapper.checkAccess(accessInfoMap);
 	}
 
+	public AccessVO selectAccessOne(HashMap<String, String> stringJson) {
+		return accessMapper.selectAccessOne(stringJson);
+	}
+
+	public AccessVO selectAccessOneApproved(HashMap<String, String> accessInfoMap) {
+		AccessVO accessVO = new AccessVO();
+
+		accessVO.setId(accessInfoMap.get("id"));
+		accessVO.setApprove(accessInfoMap.get("approve"));
+
+		return accessMapper.selectAccessOneApproved(accessVO);
+	}
+	
 	public AccessVO checkAdminOne(HashMap<String, String> accessInfoMap) {
 		return accessMapper.checkAdminOne(accessInfoMap);
 	}
@@ -30,10 +48,6 @@ public class AccessService {
 
 	public AccessVO checkEmail(HashMap<String, String> stringJson) {
 		return accessMapper.checkEmail(stringJson);
-	}
-
-	public AccessVO selectAccessOne(AccessVO accessVO) {
-		return accessMapper.selectAccessOne(accessVO);
 	}
 
 	public AccessVO selectAccessOneforUid(String uid) {

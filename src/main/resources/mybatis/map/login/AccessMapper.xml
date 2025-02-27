@@ -14,6 +14,13 @@
 		<result property="approve" column="approve"/>
     </resultMap>
 
+	<!-- 사용자 목록 조회 -->
+	<select id="selectAccessList" parameterType="HashMap" resultMap="AccessMap">
+		select * FROM FIFTH_ACCESS
+		WHERE 	1=1
+		and		approve = #{ approve }
+	</select>
+
 	<!-- 사용자 접속 홈 정보 가져오기 -->
 	<select id="loginHomeMapper" parameterType="String" resultMap="AccessMap">
 		select * FROM FIFTH_ACCESS
@@ -26,9 +33,18 @@
 		WHERE id = #{ id }
 		and approve = 'Y'
 	</select>
-	
+
 	<!-- 사용자 정보 가져오기 -->
 	<select id="selectAccessOne" parameterType="String" resultMap="AccessMap">
+		select *
+		FROM FIFTH_ACCESS 
+		WHERE 1 = 1
+		and uid = #{ uid }
+		<!-- <if test="id != null"> and id = #{ id } </if> -->
+	</select>
+	
+	<!-- 인증된 사용자 정보 가져오기 -->
+	<select id="selectAccessOneApproved" parameterType="String" resultMap="AccessMap">
 		select *
 		FROM FIFTH_ACCESS 
 		WHERE id = #{ id }
@@ -79,6 +95,7 @@
 				,email
 				,role
 				,authority
+				,approve
 			) VALUES (
 				#{ id }
 				,#{ pw }
@@ -86,6 +103,7 @@
 				,#{ email }
 				,#{ role }
 				,#{ authority }
+				,'N'
 			)
 			<!-- 
 			<selectKey resultType="String" keyProperty="resultCode" order="AFTER" >
@@ -103,6 +121,17 @@
 			and approve = 'Y'
 	</update>
 
+	<update id="updateAccount" >
+		UPDATE FIFTH_ACCESS SET
+			id = #{ id }
+			,nick = #{ nick }
+			,email = #{ email }
+			,role = #{ role }
+			,authority = #{ authority }
+			,approve = #{ approve }
+		WHERE uid = #{ uid }
+	</update>
+
 	<!-- 사용자 접속 종료시 refreshToken 초기화 -->
 	<update id="updateBlankRefreshToken" >	
 			UPDATE FIFTH_ACCESS SET
@@ -111,6 +140,17 @@
 			WHERE uid = #{ accessCode }
 			and refreshToken = #{ refreshToken }
 			and approve = 'Y'
+	</update>
+
+	<update id="disableAccount" >
+		update FIFTH_ACCESS set
+			approve = 'N'
+		where uid = #{ uid }
+	</update>
+
+	<update id="deleteAccount" >
+		delete from FIFTH_ACCESS
+		where uid = #{ uid }
 	</update>
 
 </mapper>

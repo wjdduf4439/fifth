@@ -36,8 +36,8 @@ public class AccessService {
 		return accessMapper.selectAccessOne(accessVO);
 	}
 
-	public AccessVO selectAccessOneforCode(String code) {
-		return accessMapper.selectAccessOneforCode(code);
+	public AccessVO selectAccessOneforUid(String uid) {
+		return accessMapper.selectAccessOneforUid(uid);
 	}
 
 	public Integer insertAccount(HashMap<String, String> stringJson) {

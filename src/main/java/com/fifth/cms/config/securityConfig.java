@@ -19,6 +19,7 @@ import com.fifth.cms.security.loginAuthenticationEntryPoint;
 import com.fifth.cms.security.loginDeniedHandler;
 import com.fifth.cms.security.loginFailedHandler;
 import com.fifth.cms.security.loginSuccessHandler;
+import com.fifth.cms.security.filter.JsonAuthFailedHandler;
 import com.fifth.cms.security.filter.JsonAuthentication;
 import com.fifth.cms.security.filter.JwtAuthenticationFilter;
 import com.fifth.cms.service.login.CustomAuthenticationProvider;
@@ -34,6 +35,7 @@ public class securityConfig {
     private final CustomAuthenticationProvider customAuthenticationProvider;
     private final loginSuccessHandler loginSuccessHandler;
     private final loginFailedHandler loginFailedHandler;
+	private final JsonAuthFailedHandler jsonAuthFailedHandler;
     private final loginDeniedHandler loginDeniedHandler;
     private final loginAuthenticationEntryPoint loginAuthenticationEntryPoint;
     private final CorsFilter corsFilter;
@@ -43,6 +45,7 @@ public class securityConfig {
                           CustomAuthenticationProvider customAuthenticationProvider,
                           loginSuccessHandler loginSuccessHandler,
                           loginFailedHandler loginFailedHandler,
+						  JsonAuthFailedHandler jsonAuthFailedHandler,
                           loginDeniedHandler loginDeniedHandler,
                           loginAuthenticationEntryPoint loginAuthenticationEntryPoint,
                           CorsFilter corsFilter,
@@ -51,6 +54,7 @@ public class securityConfig {
         this.customAuthenticationProvider = customAuthenticationProvider;
         this.loginSuccessHandler = loginSuccessHandler;
         this.loginFailedHandler = loginFailedHandler;
+		this.jsonAuthFailedHandler = jsonAuthFailedHandler;
         this.loginDeniedHandler = loginDeniedHandler;
         this.loginAuthenticationEntryPoint = loginAuthenticationEntryPoint;
         this.corsFilter = corsFilter;
@@ -82,10 +86,11 @@ public class securityConfig {
 					.anyRequest().authenticated()
 			)
 			//axios 요청 시 로그인 인증 처리
-			.addFilterBefore(new JsonAuthentication(authenticationManager, bCryptPasswordEncoder(), accessService), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new JsonAuthentication(authenticationManager, bCryptPasswordEncoder(), accessService).withFailureHandler(jsonAuthFailedHandler), UsernamePasswordAuthenticationFilter.class)
 			//인증 필요한 사이트 접속시, jwt 요청 시 인증 처리
 			.addFilterBefore(new JwtAuthenticationFilter(accessService), UsernamePasswordAuthenticationFilter.class)
-
+			//인증 실패 시 처리
+			// 폼 기반 인증에서 필요한 로직들
 			// .formLogin(form -> {
 			// 	form.usernameParameter("id");
 			// 	form.passwordParameter("pw");

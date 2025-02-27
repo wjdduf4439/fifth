@@ -1,13 +1,22 @@
 package com.fifth.cms.config;
 
+import java.util.Properties;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import java.util.Properties;
 
 @Configuration
 public class AuthMailConfig {
+
+    private final Environment environment;
+
+    public AuthMailConfig(Environment environment) {
+        this.environment = environment;
+    }
+
     @Bean
     public JavaMailSender javaMailSender() {
 
@@ -17,7 +26,7 @@ public class AuthMailConfig {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
         mailSender.setUsername("wjdduf4439@gmail.com");
-        mailSender.setPassword("ajzr bdiy zsvx kqgj");
+        mailSender.setPassword(environment.getProperty("GMAIL_SMTP_PASSWORD"));
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

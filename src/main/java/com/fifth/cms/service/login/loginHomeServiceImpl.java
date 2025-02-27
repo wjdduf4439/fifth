@@ -70,7 +70,7 @@ public class loginHomeServiceImpl implements UserDetailsService {
 			loginHomeVO = accessMapper.selectAccessOne(accessVO);
 
 			if(loginHomeVO == null) {
-				throw new UsernameNotFoundException( loginHomeVO.getId() );
+				return accessVO;
 			}
 			
 		} catch (Exception e) {

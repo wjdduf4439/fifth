@@ -80,10 +80,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		// 가져온다
 		AccessVO userDetails = (AccessVO) loginHomeServiceImpl.loadUserByUsername(username);
 
-		System.out
-				.println("password <-> userDetails.getPassword() : " + password + " <-> " + userDetails.getPassword());
-		System.out.println("최종 인증 결과 : passwordEncoder.matches(password, userDetails.getPassword()) : "
-				+ passwordEncoder.matches(password, userDetails.getPassword()));
+		if(userDetails.getUid() == null) {
+			throw new BadCredentialsException("정보가 없거나 인증되지 않은 사용자입니다.");
+		}
+
+		System.out.println("password <-> userDetails.getPassword() : " + password + " <-> " + userDetails.getPassword());
+		System.out.println("최종 인증 결과 : passwordEncoder.matches(password, userDetails.getPassword()) : " + passwordEncoder.matches(password, userDetails.getPassword()));
 
 		if (!passwordEncoder.matches(password, userDetails.getPassword())) {
 			throw new BadCredentialsException("아이디 또는 비밀번호가 일치하지 않습니다.");

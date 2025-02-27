@@ -11,51 +11,62 @@
 		<result property="role" column="role"/>
 		<result property="authority" column="authority"/>
 		<result property="refreshToken" column="refreshToken"/>
+		<result property="approve" column="approve"/>
     </resultMap>
 
 	<!-- 사용자 접속 홈 정보 가져오기 -->
 	<select id="loginHomeMapper" parameterType="String" resultMap="AccessMap">
-		select * from FIFTH_ACCESS
+		select * FROM FIFTH_ACCESS
 	</select>
 
 	<!-- 사용자 아이디 중복 체크 -->
 	<select id="accIdCount" parameterType="String" resultType="int">
-		select count(`code`) from FIFTH_ACCESS WHERE id = #{ id }
-	</select>
-	
-	<!-- 사용자 코드 최대값 가져오기 -->
-	<select id="accCodeMax" resultType="String">
-		select max(`code`) from FIFTH_ACCESS
+		select count(`code`)
+		FROM FIFTH_ACCESS 
+		WHERE id = #{ id }
+		and approve = 'Y'
 	</select>
 	
 	<!-- 사용자 정보 가져오기 -->
 	<select id="selectAccessOne" parameterType="String" resultMap="AccessMap">
-		select * from FIFTH_ACCESS WHERE id = #{ id }
+		select *
+		FROM FIFTH_ACCESS 
+		WHERE id = #{ id }
+		and approve = 'Y'
 	</select>
 
 	<!-- 사용자 정보 가져오기 -->
-	<select id="selectAccessOneforCode" parameterType="String" resultMap="AccessMap">
-		select * from FIFTH_ACCESS WHERE code = #{ code }
+	<select id="selectAccessOneforUid" parameterType="String" resultMap="AccessMap">
+		select *
+		FROM FIFTH_ACCESS 
+		WHERE uid = #{ uid }
+		and approve = 'Y'
 	</select>
 
 	<!-- 사용자 접속여부 체크 -->
 	<select id="checkAccess" parameterType="HashMap" resultType="int">
-		select count(`code`) from FIFTH_ACCESS WHERE code = #{ accessCode } and refreshToken = #{ refreshToken } and id = #{ accessId } and nick = #{ nick }
+		select count(`uid`)
+		FROM FIFTH_ACCESS 
+		WHERE uid = #{ accessCode } and refreshToken = #{ refreshToken } and id = #{ accessId } and nick = #{ nick } and approve = 'Y'
 	</select>
 
 	<!-- 사용자 접속여부 체크 -->
 	<select id="checkAdminOne" parameterType="HashMap" resultMap="AccessMap">
-		select * from FIFTH_ACCESS WHERE code = #{ accessCode } and refreshToken = #{ refreshToken } and authority = 'admin'
+		select * 
+		FROM FIFTH_ACCESS 
+		WHERE uid = #{ accessCode } and refreshToken = #{ refreshToken } and authority = 'admin' and approve = 'Y'
 	</select>
 
 	<!-- 사용자 닉네임 중복 체크 -->
 	<select id="checkNickName" parameterType="HashMap" resultMap="AccessMap">
-		select * from FIFTH_ACCESS WHERE nick = #{ nick }
+		select * FROM FIFTH_ACCESS 
+		WHERE nick = #{ nick } and approve = 'Y'
 	</select>
 
 	<!-- 사용자 이메일 중복 체크 -->
 	<select id="checkEmail" parameterType="HashMap" resultMap="AccessMap">
-		select * from FIFTH_ACCESS WHERE email = #{ email }
+		select * FROM FIFTH_ACCESS 
+		WHERE email = #{ email } and approve = 'Y'
 	</select>
 
 	<!-- 사용자 정보 입력 -->
@@ -87,15 +98,19 @@
 	<update id="updateRefreshToken" >
 			UPDATE FIFTH_ACCESS SET
 				refreshToken = #{ refreshToken }
+			
 			WHERE uid = #{ uid }
+			and approve = 'Y'
 	</update>
 
 	<!-- 사용자 접속 종료시 refreshToken 초기화 -->
 	<update id="updateBlankRefreshToken" >	
 			UPDATE FIFTH_ACCESS SET
 				refreshToken = ''
+			
 			WHERE uid = #{ accessCode }
 			and refreshToken = #{ refreshToken }
+			and approve = 'Y'
 	</update>
 
 </mapper>

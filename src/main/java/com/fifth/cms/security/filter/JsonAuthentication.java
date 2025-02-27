@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +52,13 @@ public class JsonAuthentication extends AbstractAuthenticationProcessingFilter {
 		setAuthenticationManager(authenticationManager);
 		this.passwordEncoder = passwordEncoder;
 		this.accessService = accessService;
+	}
+
+	// 로그인 실패 핸들러 체이닝을 지원하는 메서드 추가
+	// securityConfig.java에서 인자를 받아서 적용한다.
+	public JsonAuthentication withFailureHandler(AuthenticationFailureHandler failureHandler) {
+		super.setAuthenticationFailureHandler(failureHandler);
+		return this; // 체이닝을 위해 this 반환
 	}
 
 	/**

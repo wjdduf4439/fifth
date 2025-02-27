@@ -14,13 +14,9 @@ public interface AccessMapper {
 
 	public Integer accIdCount(HashMap<String, String> stringJson);
 
-	public String accCodeMax(AccessVO accessVO);
-
-	public String accCodeMax(HashMap<String, String> stringJson);
-
 	public AccessVO selectAccessOne(AccessVO accessVO);
 
-	public AccessVO selectAccessOneforCode(String code);
+	public AccessVO selectAccessOneforUid(String uid);
 
 	public Integer checkAccess(HashMap<String, String> accessInfoMap);
 

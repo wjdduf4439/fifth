@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			// res = accessInfo.sendResponse(res, "Access token이 만료되었습니다.");
 			// return false;
 
-			AccessVO resultVO = accessService.selectAccessOneforCode(accessInfoMap.get("accessCode"));
+			AccessVO resultVO = accessService.selectAccessOneforUid(accessInfoMap.get("accessCode"));
 			try {
 				String token = JwtUtil.generateAccessToken(resultVO.getId(), resultVO.getAuthorities().toString(), request.getRemoteAddr(), request.getHeader("User-Agent"));
 				System.out.println(this.getClass().getName() + " token : " + token);

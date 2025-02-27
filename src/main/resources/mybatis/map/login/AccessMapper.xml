@@ -121,6 +121,16 @@
 			and approve = 'Y'
 	</update>
 
+	<update id="updateApprove" >
+		UPDATE FIFTH_ACCESS 
+			SET approve = 'Y'
+		WHERE uid in (
+			<foreach collection="approveAccountList" item="item" separator=",">
+				#{ item }
+			</foreach>
+		)
+	</update>
+
 	<update id="updateAccount" >
 		UPDATE FIFTH_ACCESS SET
 			id = #{ id }
@@ -142,7 +152,7 @@
 			and approve = 'Y'
 	</update>
 
-	<update id="disableAccount" >
+	<update id="disableApprove" >
 		update FIFTH_ACCESS set
 			approve = 'N'
 		where uid = #{ uid }

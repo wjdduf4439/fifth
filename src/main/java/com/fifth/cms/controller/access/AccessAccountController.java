@@ -57,4 +57,53 @@ public class AccessAccountController {
         return resultMap;
     }
 
+    @ResponseBody
+	@RequestMapping(value = "/{processMark:approve|update|disable|restore|delete}", method = { RequestMethod.POST }, produces = "application/json")
+	public HashMap<String, Object> process(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, String> stringJson, @PathVariable("processMark")String processMark ) {
+
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("result", false);
+
+        String processName = "";
+        Integer result = 0;
+        
+        System.out.println("AccessAccountController process : " + processName + " 전 정보 : " + stringJson.toString());
+
+        if("approve".equals(processMark)) {
+            processName = "승인";
+        }else if ("update".equals(processMark)) {
+
+        }else if ("disable".equals(processMark)) {
+
+        }else if ("restore".equals(processMark)) {
+
+        }else if ("delete".equals(processMark)) {
+
+        }
+
+        if("approve".equals(processMark)) {
+            String[] approveAccountList = stringJson.get("approveAccountList").split(",");
+
+            HashMap<String, Object> approveMap = new HashMap<>();
+            approveMap.put("approveAccountList", approveAccountList);
+            
+            result = accessService.updateApprove(approveMap);
+        }else if ("update".equals(processMark)) {
+
+        }else if ("disable".equals(processMark)) {
+
+        }else if ("restore".equals(processMark)) {
+
+        }else if ("delete".equals(processMark)) {
+
+        }
+
+        if(result > 0) {
+            resultMap.put("result", true);
+            resultMap.put("message", processName + "작업 처리 완료");
+        }
+
+        return resultMap;
+    }   
+
 }

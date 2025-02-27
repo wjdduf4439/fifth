@@ -58,12 +58,24 @@ public class AccessService {
 		return accessMapper.insertAccount(stringJson);
 	}
 
-	public void updateRefreshToken(AccessVO accessVO) {
-		accessMapper.updateRefreshToken(accessVO);
+	public Integer updateRefreshToken(AccessVO accessVO) {
+		return accessMapper.updateRefreshToken(accessVO);
+	}
+
+	public Integer updateApprove(HashMap<String, Object> approveMap) {
+		return accessMapper.updateApprove(approveMap);
+	}
+
+	public void updateAccount(HashMap<String, String> stringJson) {
+		accessMapper.updateAccount(stringJson);
 	}
 
 	public Integer updateBlankRefreshToken(HashMap<String, String> stringJson) {
 		return accessMapper.updateBlankRefreshToken(stringJson);
+	}
+
+	public void disableApprove(HashMap<String, String> stringJson) {
+		accessMapper.disableApprove(stringJson);
 	}
 
 }

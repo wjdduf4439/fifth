@@ -61,6 +61,10 @@ public class AccessController {
 		// System.out.println("accRegist.go 입력할 stringJson.get(pw) : " + encodePw);
 
 		stringJson.put("pw", encodePw);
+		//닉네임과 태그에 #이 안들어가게 하기
+		String nick = stringJson.get("nick").replace("#", "");
+		String tag = stringJson.get("tag").replace("#", "");
+		stringJson.put("nick", nick + "#" + tag);
 		stringJson.put("role", "ROLE_user");
 		stringJson.put("authority", "user");
 

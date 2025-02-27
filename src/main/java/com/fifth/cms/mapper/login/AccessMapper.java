@@ -38,4 +38,12 @@ public interface AccessMapper {
 	public Integer updateRefreshToken(AccessVO accessVO);
 
 	public Integer updateBlankRefreshToken(HashMap<String, String> stringJson);
+
+	public Integer updateApprove(HashMap<String, Object> approveMap);
+
+	public Integer updateAccount(HashMap<String, String> stringJson);
+
+	public Integer disableApprove(HashMap<String, String> stringJson);
+
+	public Integer deleteAccount(HashMap<String, String> stringJson);
 }

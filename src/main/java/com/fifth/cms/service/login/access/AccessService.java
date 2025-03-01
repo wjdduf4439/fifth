@@ -66,16 +66,20 @@ public class AccessService {
 		return accessMapper.updateApprove(approveMap);
 	}
 
-	public void updateAccount(HashMap<String, String> stringJson) {
-		accessMapper.updateAccount(stringJson);
+	public Integer updateAccount(HashMap<String, String> stringJson) {
+		return accessMapper.updateAccount(stringJson);
 	}
 
 	public Integer updateBlankRefreshToken(HashMap<String, String> stringJson) {
 		return accessMapper.updateBlankRefreshToken(stringJson);
 	}
 
-	public void disableApprove(HashMap<String, String> stringJson) {
-		accessMapper.disableApprove(stringJson);
+	public Integer disableApprove(HashMap<String, String> stringJson) {
+		return accessMapper.disableApprove(stringJson);
+	}
+
+	public Integer deleteAccount(HashMap<String, String> stringJson) {
+		return accessMapper.deleteAccount(stringJson);
 	}
 
 }

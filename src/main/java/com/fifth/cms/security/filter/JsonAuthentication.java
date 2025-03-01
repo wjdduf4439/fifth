@@ -126,7 +126,10 @@ public class JsonAuthentication extends AbstractAuthenticationProcessingFilter {
 		AccessVO accessVO = new AccessVO();
 		accessVO.setUid(fifthAuthenticationToken.getUid());
 		accessVO.setRefreshToken(refreshToken);
+		System.out.println("updateRefreshToken 작업 실시 : " );
+		System.out.println("updateRefreshToken 작업 토큰 : " + refreshToken);
 		accessService.updateRefreshToken(accessVO);
+		System.out.println("updateRefreshToken 작업 종료 : " );
 
 		// JSON 객체 생성
 		Map<String, String> jsonResponse = new HashMap<>();

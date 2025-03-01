@@ -90,11 +90,19 @@ public class AccessAccountController {
             result = accessService.updateApprove(approveMap);
         }else if ("update".equals(processMark)) {
 
+            result = accessService.updateAccount(stringJson);
+
         }else if ("disable".equals(processMark)) {
+
+            result = accessService.disableApprove(stringJson);
 
         }else if ("restore".equals(processMark)) {
 
+            result = accessService.updateBlankRefreshToken(stringJson);
+
         }else if ("delete".equals(processMark)) {
+
+            result = accessService.deleteAccount(stringJson);
 
         }
 

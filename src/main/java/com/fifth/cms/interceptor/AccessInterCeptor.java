@@ -37,13 +37,14 @@ public class AccessInterCeptor implements HandlerInterceptor {
 			null == accessInfoMap.get("accessToken") || 
 			null == accessInfoMap.get("refreshToken") ||
 			null == accessInfoMap.get("accessId") ||
-			null == accessInfoMap.get("nick")
+			null == accessInfoMap.get("nick") ||
+			null == accessInfoMap.get("role")
 		) {
 			res = accessInfo.sendResponse(res, "해당하는 사용자의 인증 정보가 없습니다.");
 			return false;
-		}
-		else {
+		} else {
 			System.out.println(this.getClass().getName() + " accessInfoMap : " + accessInfoMap.toString());
+			accessInfoMap.put("role", "ROLE_" + accessInfoMap.get("role"));
 		}
 
 		// refresh token과 code으로 사용자 계정 검증

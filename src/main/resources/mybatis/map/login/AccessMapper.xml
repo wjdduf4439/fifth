@@ -34,7 +34,7 @@
 		and approve = 'Y'
 	</select>
 
-	<!-- 사용자 정보 가져오기 -->
+	<!-- 사용자 정보 가져오기 > 관리자 메뉴의 사용자 정보 게시판에서 가져오는거라서 UID로 검색-->
 	<select id="selectAccessOne" parameterType="String" resultMap="AccessMap">
 		select *
 		FROM FIFTH_ACCESS 
@@ -55,7 +55,7 @@
 	<select id="selectAccessOneforUid" parameterType="String" resultMap="AccessMap">
 		select *
 		FROM FIFTH_ACCESS 
-		WHERE uid = #{ uid }
+		WHERE accessCode = #{ accessCode }
 		and approve = 'Y'
 	</select>
 
@@ -63,14 +63,14 @@
 	<select id="checkAccess" parameterType="HashMap" resultType="int">
 		select count(`uid`)
 		FROM FIFTH_ACCESS 
-		WHERE uid = #{ accessCode } and refreshToken = #{ refreshToken } and id = #{ accessId } and nick = #{ nick } and approve = 'Y'
+		WHERE accessCode = #{ accessCode } and refreshToken = #{ refreshToken } and id = #{ accessId } and nick = #{ nick } and role = #{ role } and approve = 'Y'
 	</select>
 
 	<!-- 사용자 접속여부 체크 -->
 	<select id="checkAdminOne" parameterType="HashMap" resultMap="AccessMap">
 		select * 
 		FROM FIFTH_ACCESS 
-		WHERE uid = #{ accessCode } and refreshToken = #{ refreshToken } and authority = 'admin' and approve = 'Y'
+		WHERE accessCode = #{ accessCode } and refreshToken = #{ refreshToken } and authority = 'admin' and approve = 'Y'
 	</select>
 
 	<!-- 사용자 닉네임 중복 체크 -->
@@ -116,7 +116,7 @@
 			UPDATE FIFTH_ACCESS SET
 				refreshToken = #{ refreshToken }
 			
-			WHERE uid = #{ uid }
+			WHERE accessCode = #{ accessCode }
 			and approve = 'Y'
 	</update>
 
@@ -146,7 +146,7 @@
 			UPDATE FIFTH_ACCESS SET
 				refreshToken = ''
 			
-			WHERE uid = #{ accessCode }
+			WHERE accessCode = #{ accessCode }
 			and refreshToken = #{ refreshToken }
 			and approve = 'Y'
 	</update>

@@ -20,6 +20,7 @@ public class AccessVO implements UserDetails {
 		더 세밀한 접근 제어를 위해 사용됩니다. 특정 작업이나 리소스에 대한 접근을 제한할 때 사용됩니다.
 	*/
 	private String email;
+	private String accessCode;
 	private String role;
 	private String authority;
 	private String refreshToken;
@@ -55,6 +56,12 @@ public class AccessVO implements UserDetails {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getAccessCode() {
+		return accessCode;
+	}
+	public void setAccessCode(String accessCode) {
+		this.accessCode = accessCode;
 	}
 	public String getRole() {
 		return role;

@@ -124,19 +124,17 @@ public class JsonAuthentication extends AbstractAuthenticationProcessingFilter {
 		String refreshToken = JwtUtil.generateRefreshToken(fifthAuthenticationToken.getName());
 
 		AccessVO accessVO = new AccessVO();
-		accessVO.setUid(fifthAuthenticationToken.getUid());
+		accessVO.setAccessCode(fifthAuthenticationToken.getAccessCode());
 		accessVO.setRefreshToken(refreshToken);
-		System.out.println("updateRefreshToken 작업 실시 : " );
-		System.out.println("updateRefreshToken 작업 토큰 : " + refreshToken);
 		accessService.updateRefreshToken(accessVO);
-		System.out.println("updateRefreshToken 작업 종료 : " );
 
 		// JSON 객체 생성
 		Map<String, String> jsonResponse = new HashMap<>();
 		jsonResponse.put("message", "Authentication successful");
-		jsonResponse.put("code", fifthAuthenticationToken.getUid().toString());
+		jsonResponse.put("accessCode", fifthAuthenticationToken.getAccessCode());
 		jsonResponse.put("id", credentials.get("id"));
 		jsonResponse.put("nick", fifthAuthenticationToken.getNick());
+		jsonResponse.put("role", fifthAuthenticationToken.getAuthorities().toString().replaceAll("\\[|\\]", ""));
 		jsonResponse.put("result", "true");
 		jsonResponse.put("accessToken", accessToken);
 		jsonResponse.put("refreshToken", refreshToken);

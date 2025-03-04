@@ -22,6 +22,8 @@ public class AccessInfo {
 		accessInfo.put("accessId"		, req.getHeader("accessId"));
 		accessInfo.put("nick"			, req.getHeader("nick"));
 		accessInfo.put("ip"				, req.getRemoteAddr());
+		accessInfo.put("role"			, req.getHeader("role"));
+
 
 		return accessInfo;
 	}

@@ -98,7 +98,7 @@ public class AccessAccountController {
 
         }else if ("restore".equals(processMark)) {
 
-            result = accessService.updateBlankRefreshToken(stringJson);
+            
 
         }else if ("delete".equals(processMark)) {
 

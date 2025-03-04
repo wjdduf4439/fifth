@@ -74,6 +74,10 @@ public class AccessService {
 		return accessMapper.updateBlankRefreshToken(stringJson);
 	}
 
+	public Integer updateAccessCode(HashMap<String, String> stringJson) {
+		return accessMapper.updateAccessCode(stringJson);
+	}
+
 	public Integer disableApprove(HashMap<String, String> stringJson) {
 		return accessMapper.disableApprove(stringJson);
 	}

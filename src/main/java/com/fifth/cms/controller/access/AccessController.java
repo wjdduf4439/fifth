@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fifth.cms.model.login.AccessVO;
 import com.fifth.cms.service.login.access.AccessService;
 import com.fifth.cms.util.access.AccessInfo;
+import com.fifth.cms.util.access.RegistProcess;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -75,12 +76,26 @@ public class AccessController {
 			resultMap.put("message", "중복된 이메일이 존재해 회원가입이 불가능합니다.");
 			return resultMap;
 		}
-
+		
 		Integer result = accessService.insertAccount(stringJson);
 
-		if (result > 0) {
+		System.out.println("insertAccount result : " + stringJson.toString());
+
+		RegistProcess registProcess = new RegistProcess();
+		String accessCode = registProcess.shaHashing(stringJson.get("id"), stringJson.get("uid"));
+		stringJson.put("accessCode", accessCode);
+
+		Integer updateAccessCodeResult = accessService.updateAccessCode(stringJson);
+
+		if (result > 0 && updateAccessCodeResult > 0) {
 			resultMap.put("result", true);
 			resultMap.put("message", "회원가입 되었습니다.");
+		}else if (result > 0 && updateAccessCodeResult <= 0){
+			resultMap.put("result", false);
+			resultMap.put("message", "접속 코드 업데이트 실패");
+		}else{
+			resultMap.put("result", false);
+			resultMap.put("message", "회원가입 실패");
 		}
 
 		return resultMap;

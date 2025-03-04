@@ -43,6 +43,8 @@ public interface AccessMapper {
 
 	public Integer updateAccount(HashMap<String, String> stringJson);
 
+	public Integer updateAccessCode(HashMap<String, String> stringJson);
+
 	public Integer disableApprove(HashMap<String, String> stringJson);
 
 	public Integer deleteAccount(HashMap<String, String> stringJson);

@@ -105,11 +105,10 @@
 				,#{ authority }
 				,'N'
 			)
-			<!-- 
-			<selectKey resultType="String" keyProperty="resultCode" order="AFTER" >
-				select createCode(#{ maxCode }, concat(#{ primaryCode },'_')) AS resultCode
+			
+			<selectKey resultType="String" keyProperty="uid" order="AFTER" >
+				SELECT LAST_INSERT_ID() AS uid
 			</selectKey>
-			 -->
 	</insert>
 
 	<!-- 사용자 접속 시 refreshToken 입력 -->
@@ -150,6 +149,13 @@
 			WHERE uid = #{ accessCode }
 			and refreshToken = #{ refreshToken }
 			and approve = 'Y'
+	</update>
+
+	<!-- 사용자 접속 코드 업데이트 -->
+	<update id="updateAccessCode" >
+		UPDATE FIFTH_ACCESS SET
+			accessCode = #{ accessCode }
+		WHERE uid = #{ uid }
 	</update>
 
 	<update id="disableApprove" >

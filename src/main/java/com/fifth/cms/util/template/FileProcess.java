@@ -149,9 +149,10 @@ public class FileProcess {
 		System.out.println("postContentImageFile noPostStoragePath : " + noPostStoragePath + "// postStoragePath : " + postStoragePath);
 		System.out.println("saveTempContentImageFileStringList size : " + saveTempContentImageFileStringList.size());
 		
+		//이동할 이미지가 없으면 이상없음 true 보내기
 		if(	saveTempContentImageFileStringList.size() <= 0 || 
 			( "".equals(saveTempContentImageFileStringList.get(0)) && saveTempContentImageFileStringList.size() == 1 )
-			) return false;
+			) return true;
 
 		File noPostStoragePathFile = new File(noPostStoragePath);
 		if(noPostStoragePathFile.exists() && noPostStoragePathFile.isDirectory()) {

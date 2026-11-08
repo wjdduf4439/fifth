@@ -21,6 +21,18 @@ public class AccessService {
 		return accessMapper.selectAccessList(stringJson);
 	}
 
+	public List<AccessVO> checkAccessListId(HashMap<String, String> stringJson) {
+		return accessMapper.checkAccessListId(stringJson);
+	}
+
+	public List<AccessVO> checkAccessListEmail(HashMap<String, String> stringJson) {
+		return accessMapper.checkAccessListEmail(stringJson);
+	}
+
+	public List<AccessVO> checkAccessListNick(HashMap<String, String> stringJson) {
+		return accessMapper.checkAccessListNick(stringJson);
+	}
+
 	public Integer checkAccess(HashMap<String, String> accessInfoMap) {
 		return accessMapper.checkAccess(accessInfoMap);
 	}
@@ -44,6 +56,10 @@ public class AccessService {
 
 	public AccessVO checkNickName(HashMap<String, String> stringJson) {
 		return accessMapper.checkNickName(stringJson);
+	}
+
+	public AccessVO checkId(HashMap<String, String> stringJson) {
+		return accessMapper.checkId(stringJson);
 	}
 
 	public AccessVO checkEmail(HashMap<String, String> stringJson) {
@@ -80,6 +96,10 @@ public class AccessService {
 
 	public Integer disableApprove(HashMap<String, String> stringJson) {
 		return accessMapper.disableApprove(stringJson);
+	}
+
+	public Integer restoreApprove(HashMap<String, String> stringJson) {
+		return accessMapper.restoreApprove(stringJson);
 	}
 
 	public Integer deleteAccount(HashMap<String, String> stringJson) {

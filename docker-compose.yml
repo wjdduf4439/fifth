@@ -1,0 +1,16 @@
+services:
+  fifth:
+    image: fifth_gradle
+    container_name: fifth_gradle_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_PORT:-9005}:${APP_PORT:-9005}"
+    environment:
+      SERVER_PORT: ${APP_PORT:-9005}
+      STORAGEPATH: ${STORAGE_CONTAINER_PATH:-/home/fifth_storage}/
+    volumes:
+      - "${STORAGE_HOST_PATH:-C:/fifth_storage}:${STORAGE_CONTAINER_PATH:-/home/fifth_storage}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

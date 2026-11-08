@@ -11,6 +11,7 @@ DockerFile
 run_docker.sh
 run_docker.bat
 application.yaml
+.env
 
 ### STS ###
 .apt_generated

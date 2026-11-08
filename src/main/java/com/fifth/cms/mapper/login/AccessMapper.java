@@ -13,6 +13,12 @@ public interface AccessMapper {
 
 	public List<AccessVO> selectAccessList(HashMap<String, String> stringJson);
 
+	public List<AccessVO> checkAccessListId(HashMap<String, String> stringJson);
+
+	public List<AccessVO> checkAccessListEmail(HashMap<String, String> stringJson);
+
+	public List<AccessVO> checkAccessListNick(HashMap<String, String> stringJson);
+
 	public Integer accIdCount(AccessVO accessVO);
 
 	public Integer accIdCount(HashMap<String, String> stringJson);
@@ -26,6 +32,8 @@ public interface AccessMapper {
 	public Integer checkAccess(HashMap<String, String> accessInfoMap);
 
 	public AccessVO checkAdminOne(HashMap<String, String> accessInfoMap);
+
+	public AccessVO checkId(HashMap<String, String> stringJson);
 
 	public AccessVO checkNickName(HashMap<String, String> stringJson);
 
@@ -46,6 +54,8 @@ public interface AccessMapper {
 	public Integer updateAccessCode(HashMap<String, String> stringJson);
 
 	public Integer disableApprove(HashMap<String, String> stringJson);
+
+	public Integer restoreApprove(HashMap<String, String> stringJson);
 
 	public Integer deleteAccount(HashMap<String, String> stringJson);
 }

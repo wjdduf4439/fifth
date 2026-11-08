@@ -72,13 +72,13 @@ public class AccessAccountController {
         if("approve".equals(processMark)) {
             processName = "승인";
         }else if ("update".equals(processMark)) {
-
+            processName = "수정";
         }else if ("disable".equals(processMark)) {
-
+            processName = "비활성화";
         }else if ("restore".equals(processMark)) {
-
+            processName = "복구";
         }else if ("delete".equals(processMark)) {
-
+            processName = "삭제";
         }
 
         if("approve".equals(processMark)) {
@@ -98,7 +98,7 @@ public class AccessAccountController {
 
         }else if ("restore".equals(processMark)) {
 
-            
+            result = accessService.restoreApprove(stringJson);
 
         }else if ("delete".equals(processMark)) {
 

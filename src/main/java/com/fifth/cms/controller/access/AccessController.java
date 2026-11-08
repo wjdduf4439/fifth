@@ -63,11 +63,26 @@ public class AccessController {
 
 		stringJson.put("pw", encodePw);
 		//닉네임과 태그에 #이 안들어가게 하기
-		String nick = stringJson.get("nick").replace("#", "");
-		String tag = stringJson.get("tag").replace("#", "");
-		stringJson.put("nick", nick + "#" + tag);
-		stringJson.put("role", "ROLE_user");
-		stringJson.put("authority", "user");
+		// String nick = stringJson.get("nick").replace("#", "");
+		// String tag = stringJson.get("tag").replace("#", "");
+		// stringJson.put("nick", nick + "#" + tag);
+		// stringJson.put("role", "ROLE_user");
+		// stringJson.put("authority", "user");
+
+		//닉네임과 태그에 #이 들어가면 중복감지 처리
+		if(stringJson.get("nick").contains("#") || stringJson.get("tag").contains("#")) {
+			resultMap.put("result", false);
+			resultMap.put("message", "닉네임에 형식에 맞지않는 특수문자가 있습니다 : #");
+			return resultMap;
+		}
+
+		//아이디 중복감지
+		AccessVO checkIdVO = accessService.checkId(stringJson);
+		if(checkIdVO != null) {
+			resultMap.put("result", false);
+			resultMap.put("message", "중복된 아이디가 존재해 회원가입이 불가능합니다.");
+			return resultMap;
+		}
 
 		//이메일 중복감지
 		AccessVO checkEmailVO = accessService.checkEmail(stringJson);

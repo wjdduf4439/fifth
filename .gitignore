@@ -12,6 +12,7 @@ run_docker.sh
 run_docker.bat
 application.yaml
 .env
+docker-compose.yml
 
 ### STS ###
 .apt_generated

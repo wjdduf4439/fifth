@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
-	<!-- 변수 정의 -->
-	<property name="LOG_DIR" value="/dev/log" />
-	<property name="LOG_PATH_NAME" value="${LOG_DIR}/data.log" />
+	<!-- file 을 고정하지 않으면 fileNamePattern 의 년월일 파일에 바로 기록하고, 자정에 다음 날짜 파일로 넘긴다. -->
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -13,9 +11,9 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH_NAME}</file>
+        <immediateFlush>true</immediateFlush>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>labatory.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>/var/log/fifth/%d{yyyyMMdd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
 
@@ -63,13 +61,12 @@
 
     <!-- MyBatis 로그 설정 추가 -->
     <logger name="org.mybatis" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </logger>
 	
 
     <root level="debug">
-        <appender-ref ref="CONSOLE"/> <!-- Console에 로그를 출력하고자 할 때 사용 -->
-        <!-- <appender-ref ref="FILE"/> --> <!-- File로 로그를 남기고자 할 때 사용 -->
+        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>
